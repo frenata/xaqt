@@ -1,0 +1,14 @@
+{
+    "Python": {
+        "compiler": "python",
+        "sourceFile": "file.py"
+        },
+    "Go" : {
+        "compiler": "go run",
+        "sourceFile": "file.go"
+        },
+    "Nodejs": {
+        "compiler": "nodejs",
+        "sourceFile": "file.js"
+    }
+}
