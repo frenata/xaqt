@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"time"
 )
 
@@ -26,7 +27,13 @@ type SandboxOptions struct {
 func DefaultSandboxOptions() SandboxOptions {
 	//rand := strconv.Itoa(rand.Intn(1000))
 	pwd, _ := os.Getwd()
-	return SandboxOptions{"", pwd, "virtual_machine", time.Second * 20}
+
+	tmp := ""
+	if runtime.GOOS == "darwin" {
+		tmp = "/tmp"
+	}
+
+	return SandboxOptions{tmp, pwd, "virtual_machine", time.Second * 20}
 }
 
 func NewSandbox(l Language, code, stdin string, options SandboxOptions) *Sandbox {
@@ -41,7 +48,7 @@ func (s *Sandbox) Run() (string, error) {
 }
 
 func (s *Sandbox) prepare() {
-	tmpFolder, err := ioutil.TempDir("", "docker-test")
+	tmpFolder, err := ioutil.TempDir(s.options.folder, "docker-test")
 	if err != nil {
 		log.Fatal(err)
 	}
