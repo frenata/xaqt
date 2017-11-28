@@ -53,7 +53,7 @@ func (s *Sandbox) prepare() {
 		log.Fatal(err)
 	}
 
-	if err := os.Chmod(tmpFolder, 0755); err != nil {
+	if err := os.Chmod(tmpFolder, 0777); err != nil {
 		log.Fatal(err)
 	}
 
