@@ -13,7 +13,7 @@
 
 compiler=$1
 file=$2
-output=$3
+runner=$3
 addtionalArg=$4
 
 
@@ -44,16 +44,23 @@ exec  2> $"/usercode/errors"
 
 START=$(date +%s.%2N)
 #Branch 1
-if [ "$output" = "" ]; then
-    $compiler /usercode/$file -< $"/usercode/inputFile" #| tee /usercode/output.txt
+if [ "$runner" = "" ]; then
+    # treat each line of inputFile as a separate STDIN
+    while read p; do 
+        echo -n $p | $compiler /usercode/$file
+    done < $"/usercode/inputFile"
+
 #Branch 2
-else
+else  # runner was not blank
 	#In case of compile errors, redirect them to a file
         $compiler /usercode/$file $addtionalArg #&> /usercode/errors.txt
-	#Branch 2a
+	#Branch 2a : exit code is zero aka success
 	if [ $? -eq 0 ];	then
-		$output -< $"/usercode/inputFile" #| tee /usercode/output.txt    
-	#Branch 2b
+        while read p; do
+            echo -n $p | $runner 
+        done < $"/usercode/inputFile"
+
+	#Branch 2b : exit code is not zero
 	else
 	    echo "Compilation Failed"
 	    #if compilation fails, display the output file	

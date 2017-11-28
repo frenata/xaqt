@@ -1,13 +1,12 @@
-package compile
+package testbox
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strconv"
 	"time"
 )
 
@@ -21,13 +20,13 @@ type SandboxOptions struct {
 	folder  string
 	path    string
 	vm_name string
-	timeout int
+	timeout time.Duration
 }
 
 func DefaultSandboxOptions() SandboxOptions {
-	rand := strconv.Itoa(rand.Intn(1000))
+	//rand := strconv.Itoa(rand.Intn(1000))
 	pwd, _ := os.Getwd()
-	return SandboxOptions{"temp/" + rand, pwd, "virtual_machine", 20}
+	return SandboxOptions{"", pwd, "virtual_machine", time.Second * 20}
 }
 
 func NewSandbox(l Language, code, stdin string, options SandboxOptions) *Sandbox {
@@ -36,9 +35,9 @@ func NewSandbox(l Language, code, stdin string, options SandboxOptions) *Sandbox
 	return &box
 }
 
-func (s *Sandbox) Run() {
+func (s *Sandbox) Run() (string, error) {
 	s.prepare()
-	s.execute()
+	return s.execute()
 }
 
 func (s *Sandbox) prepare() {
@@ -74,7 +73,7 @@ func (s *Sandbox) prepare() {
 	// log msg
 }
 
-func (s *Sandbox) execute() {
+func (s *Sandbox) execute() (string, error) {
 	compiler := s.language.Compiler
 	filename := s.language.SourceFile
 	optionalExecutable := s.language.OptionalExecutable
@@ -82,21 +81,26 @@ func (s *Sandbox) execute() {
 
 	dockerCommand := s.options.path + "/DockerTimeout.sh"
 
-	args := []string{strconv.Itoa(s.options.timeout) + "s", "-u", "mysql", "-i", "-t", "--volume=" + s.options.folder + ":/usercode", s.options.vm_name, "/usercode/script.sh", compiler, filename, optionalExecutable, flags}
+	args := []string{fmt.Sprintf("%s", s.options.timeout), "-u", "mysql", "-i", "-t", "--volume=" + s.options.folder + ":/usercode", s.options.vm_name, "/usercode/script.sh", compiler, filename, optionalExecutable, flags}
 
 	done := make(chan error)
 
 	go spawnDocker(dockerCommand, args, done)
 
 	select {
-	case res := <-done:
-		//log.Println(res)
-		_ = res
+	case <-done:
+		errorBytes, err := ioutil.ReadFile(s.options.folder + "/errors")
 		bytes, err := ioutil.ReadFile(s.options.folder + "/completed")
-		log.Println(string(bytes), err)
-	case <-time.After(time.Second * 10): // TODO: use timeout
-		// clean up spawnDocker
+		// TODO: handle file io errors
+		if len(errorBytes) > 0 {
+			bytes, err = errorBytes, fmt.Errorf("compile error")
+		}
+
+		return string(bytes), err
+	case <-time.After(time.Second * s.options.timeout): // TODO: use timeout
+		// TODO clean up temp folders spawnDocker
 		log.Println("timed out")
+		return "", fmt.Errorf("Timed out")
 	}
 }
 
