@@ -5,7 +5,13 @@ to=$1
 shift
 
 cont=$(docker run --rm -d "$@")
-code=$(timeout "$to" docker wait "$cont" || true)
+unamestr=`uname`
+if [ "$unamestr" == 'Darwin' ]; then
+	code=$(gtimeout "$to" docker wait "$cont" || true)
+else
+	code=$(timeout "$to" docker wait "$cont" || true)
+fi
+
 docker kill $cont &> /dev/null
 echo -n 'status: '
 if [ -z "$code" ]; then
