@@ -53,7 +53,7 @@ func (s *Sandbox) prepare() {
 		log.Fatal(err)
 	}
 
-	if err := os.Chmod(tmpFolder, 0777); err != nil {
+	if err := os.Chmod(tmpFolder, 0755); err != nil {
 		log.Fatal(err)
 	}
 
@@ -95,7 +95,8 @@ func (s *Sandbox) execute() (string, error) {
 	go spawnDocker(dockerCommand, args, done)
 
 	select {
-	case <-done:
+	case res := <-done:
+		log.Printf("Docker returns: %v", res)
 		errorBytes, err := ioutil.ReadFile(s.options.folder + "/errors")
 		bytes, err := ioutil.ReadFile(s.options.folder + "/completed")
 		// TODO: handle file io errors
@@ -113,7 +114,8 @@ func (s *Sandbox) execute() (string, error) {
 
 func spawnDocker(dockerCommand string, args []string, done chan error) {
 	cmd := exec.Command(dockerCommand, args...)
-	err := cmd.Run()
+	bytes, err := cmd.CombinedOutput()
+	log.Printf("Docker stdout: %v", string(bytes))
 	done <- err
 }
 
