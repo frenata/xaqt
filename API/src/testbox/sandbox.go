@@ -25,7 +25,6 @@ type SandboxOptions struct {
 }
 
 func DefaultSandboxOptions() SandboxOptions {
-	//rand := strconv.Itoa(rand.Intn(1000))
 	pwd, _ := os.Getwd()
 
 	tmp := ""
@@ -57,6 +56,7 @@ func (s *Sandbox) prepare() {
 		log.Fatal(err)
 	}
 
+	// record tmpdir for easy deletion
 	s.options.folder = tmpFolder
 
 	err = s.copyPayload()
@@ -81,6 +81,8 @@ func (s *Sandbox) prepare() {
 }
 
 func (s *Sandbox) execute() (string, error) {
+	defer os.RemoveAll(s.options.folder)
+
 	compiler := s.language.Compiler
 	filename := s.language.SourceFile
 	optionalExecutable := s.language.OptionalExecutable
@@ -105,8 +107,7 @@ func (s *Sandbox) execute() (string, error) {
 		}
 
 		return string(bytes), err
-	case <-time.After(time.Second * s.options.timeout): // TODO: use timeout
-		// TODO clean up temp folders spawnDocker
+	case <-time.After(time.Second * s.options.timeout):
 		log.Println("timed out")
 		return "", fmt.Errorf("Timed out")
 	}
