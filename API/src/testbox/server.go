@@ -7,7 +7,7 @@ import (
 
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
-func Test(language, code, input, expected string) []bool {
+func Test(language, code, input, expected string) map[string]bool {
 
 	lang := LanguageMap[language]
 
@@ -16,7 +16,7 @@ func Test(language, code, input, expected string) []bool {
 	output, err := sb.Run()
 	if err != nil {
 		log.Println(err)
-		return []bool{false}
+		return nil
 	}
 
 	splitOutput := strings.SplitN(output, "*-COMPILEBOX::ENDOFOUTPUT-*", 2)
@@ -24,23 +24,25 @@ func Test(language, code, input, expected string) []bool {
 	_ = timeTaken
 	result := splitOutput[0]
 
-	return compareLineByLine(expected, result)
+	return compareLineByLine(input, expected, result)
 }
 
-func compareLineByLine(exp, res string) []bool {
+func compareLineByLine(input, exp, res string) map[string]bool {
+	inpSlice := strings.Split(input, "\n")
 	expSlice := strings.Split(exp, "\n")
 	resSlice := strings.Split(res, "\n")
 
-	results := make([]bool, len(expSlice))
+	results := make(map[string]bool, len(expSlice))
 
 	// TODO deal with partial success but incorrect result couont
-	if len(expSlice) != len(resSlice) {
+	/*if len(expSlice) != len(resSlice) {
 		return results
+	}*/
+
+	for i := 0; i < len(inpSlice)-1; i++ {
+		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
+		results[inpSlice[i]] = expSlice[i] == resSlice[i]
 	}
 
-	for i := range expSlice {
-		results[i] = expSlice[i] == resSlice[i]
-	}
-
-	return results[:len(results)-1]
+	return results
 }
