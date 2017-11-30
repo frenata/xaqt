@@ -1,0 +1,27 @@
+{
+    "1": {
+        "description": "echo stdin",
+        "io": {
+            "":"",
+            "test":"test"
+        }
+    },
+    "2": {
+        "description": "reverse the string",
+        "io": {
+            "1": "1",
+            "toggle": "elggot",
+            "pop": "pop"
+        }
+    },
+    "3": {
+        "description": "is it a palindrome?",
+        "io": {
+            "bob": "true",
+            "canal": "false",
+            "a man, a plan, a canal: panama!": "true",
+            "boot": "false",
+            "":"false"
+        }
+    }
+}

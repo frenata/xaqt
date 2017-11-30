@@ -4,16 +4,16 @@ import "strings"
 
 type id string
 type Test struct {
-	description string
-	io          map[string]string
+	Description string            `json:"description"`
+	Io          map[string]string `json:"io"`
 }
 
 func (t Test) StdIO() (string, string) {
-	inputs := make([]string, len(t.io))
-	outputs := make([]string, len(t.io))
+	inputs := make([]string, len(t.Io))
+	outputs := make([]string, len(t.Io))
 
 	i := 0
-	for k, v := range t.io {
+	for k, v := range t.Io {
 		inputs[i] = k
 		outputs[i] = v
 		i++

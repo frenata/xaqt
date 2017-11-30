@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -37,13 +38,13 @@ func getTest(w http.ResponseWriter, r *http.Request) {
 	var testid id
 
 	// ranging as a quick way to get a random map entry
-	for k, v := range tests {
+	for k, v := range challenges {
 		testid = k
 		test = v
 		break
 	}
 
-	tr := TestResponse{testid, test.description}
+	tr := TestResponse{testid, test.Description}
 	json, _ := json.MarshalIndent(tr, "", "    ")
 
 	w.Header().Set("Content-Type", "application/json")
@@ -59,7 +60,7 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	test := tests[submission.Id]
+	test := challenges[submission.Id]
 	stdin, stdout := test.StdIO()
 
 	passed := testbox.Test(submission.Language, submission.Code, stdin, stdout)
@@ -71,10 +72,18 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(json))
 }
 
-var tests map[id]Test
+var challenges map[id]Test
 
 func init() {
-	// later read from a file
-	tests = make(map[id]Test)
-	tests["1"] = Test{"echo", map[string]string{"": "", "test": "test"}}
+	bytes, err := ioutil.ReadFile("data/challenges.json")
+	if err != nil {
+		panic(err)
+	}
+
+	challenges = make(map[id]Test)
+	err = json.Unmarshal(bytes, &challenges)
+	if err != nil {
+		panic(err)
+	}
+
 }
