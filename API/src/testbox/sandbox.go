@@ -98,12 +98,13 @@ func (s *Sandbox) execute() (string, error) {
 
 	select {
 	case res := <-done:
-		log.Printf("Docker returns: %v", res)
+		_ = res
+		//log.Printf("Docker returns: %v", res)
 		errorBytes, err := ioutil.ReadFile(s.options.folder + "/errors")
 		bytes, err := ioutil.ReadFile(s.options.folder + "/completed")
 		// TODO: handle file io errors
 		if len(errorBytes) > 0 {
-			bytes, err = errorBytes, fmt.Errorf("compile error")
+			bytes, err = errorBytes, fmt.Errorf("compile error: %s", errorBytes)
 		}
 
 		return string(bytes), err
@@ -116,7 +117,8 @@ func (s *Sandbox) execute() (string, error) {
 func spawnDocker(dockerCommand string, args []string, done chan error) {
 	cmd := exec.Command(dockerCommand, args...)
 	bytes, err := cmd.CombinedOutput()
-	log.Printf("Docker stdout: %v", string(bytes))
+	_ = bytes
+	//log.Printf("Docker stdout: %v", string(bytes))
 	done <- err
 }
 

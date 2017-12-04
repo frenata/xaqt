@@ -1,15 +1,35 @@
 package testbox
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"strings"
 )
 
+type TestBox struct {
+	languageMap map[string]Language
+}
+
+func New(languagesFile string) TestBox {
+	bytes, err := ioutil.ReadFile(languagesFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	languageMap := make(map[string]Language, 0)
+	err = json.Unmarshal(bytes, &languageMap)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return TestBox{languageMap}
+}
+
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
-func Test(language, code, input, expected string) map[string]bool {
-
-	lang := LanguageMap[language]
+func (t TestBox) Test(language, code, input, expected string) map[string]bool {
+	lang := t.languageMap[language]
 
 	sb := NewSandbox(lang, code, input, DefaultSandboxOptions())
 

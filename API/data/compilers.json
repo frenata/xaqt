@@ -10,5 +10,54 @@
     "Nodejs": {
         "compiler": "nodejs",
         "sourceFile": "file.js"
+    },
+    "Ruby": {
+        "compiler": "ruby",
+        "sourceFile": "file.rb"
+    },
+    "Clojure": {
+        "compiler": "clojure",
+        "sourceFile": "file.clj"
+    },
+    "Php": {
+        "compiler": "php",
+        "sourceFile": "file.php"
+    },
+    "Nodejs": {
+        "compiler": "nodejs",
+        "sourceFile": "file.js"
+    },
+    "Scala": {
+        "compiler": "scala",
+        "sourceFile": "file.scala"
+    },
+    "C++": {
+        "compiler": "g++ -o /usercode/a.out",
+        "sourceFile": "file.cpp",
+        "optionalExecutable": "/usercode/a.out"
+    },
+    "Java": {
+        "compiler": "javac",
+        "sourceFile": "file.java",
+        "optionalExecutable": "/usercode/javaRunner.sh"
+    },
+    "Perl": {
+        "compiler": "perl",
+        "sourceFile": "file.pl"
+    },
+    "Rust": {
+        "compiler": "'HOME=/opt/rust /opt/rust/.cargo/bin/rustc'",
+        "sourceFile": "file.rs",
+        "optionalExecutable": "/usercode/a.out",
+        "compilerFlags": "-o /usercode/a.out"
+    },
+    "C#": {
+        "compiler": "gmcs",
+        "sourceFile": "file.cs",
+        "optionalExecutable": "mono /usercode/file.exe"
+    },
+    "Bash": {
+        "compiler": "/bin/bash",
+        "sourceFile": "file.sh"
     }
 }
