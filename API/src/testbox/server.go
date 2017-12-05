@@ -2,6 +2,7 @@ package testbox
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -30,6 +31,10 @@ func New(languagesFile string) TestBox {
 // input and expected MUST end in newlines
 func (t TestBox) Test(language, code, input, expected string) map[string]bool {
 	lang := t.languageMap[language]
+
+	if code == "" {
+		return errors.New("no code submitted")
+	}
 
 	sb := NewSandbox(lang, code, input, DefaultSandboxOptions())
 
