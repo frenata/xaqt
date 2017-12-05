@@ -2,7 +2,7 @@
     "1": {
         "description": "echo stdin",
         "io": {
-            "":"",
+            "not-test":"not-test",
             "test":"test"
         }
     },
@@ -86,11 +86,11 @@
     "10": {
         "description": "can these queens attack each other?",
         "io": {
-            "b4\tb4": false,
-            "a8\tb9": false,
-            "b4\tb7": true,
-            "a1\tf6": true,
-            "b3\td7": false
+            "b4\tb4": "false",
+            "a8\tb9": "false",
+            "b4\tb7": "true",
+            "a1\tf6": "true",
+            "b3\td7": "false"
         }
     }
 }
