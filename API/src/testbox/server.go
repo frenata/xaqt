@@ -2,7 +2,7 @@ package testbox
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -10,6 +10,12 @@ import (
 
 type TestBox struct {
 	languageMap map[string]Language
+}
+
+type Message struct {
+	Type   string `json:"type"`
+	Sender string `json:"sender"`
+	Data   string `json:"data"`
 }
 
 func New(languagesFile string) TestBox {
@@ -29,11 +35,11 @@ func New(languagesFile string) TestBox {
 
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
-func (t TestBox) Test(language, code, input, expected string) map[string]bool {
+func (t TestBox) Test(language, code, input, expected string) (map[string]bool, Message) {
 	lang := t.languageMap[language]
 
 	if code == "" {
-		return errors.New("no code submitted")
+		return nil, Message{"error", "testBox", "no code submitted"}
 	}
 
 	sb := NewSandbox(lang, code, input, DefaultSandboxOptions())
@@ -41,7 +47,7 @@ func (t TestBox) Test(language, code, input, expected string) map[string]bool {
 	output, err := sb.Run()
 	if err != nil {
 		log.Println(err)
-		return nil
+		return nil, Message{"error", "testBox", fmt.Sprintf("%s", err)}
 	}
 
 	splitOutput := strings.SplitN(output, "*-COMPILEBOX::ENDOFOUTPUT-*", 2)
@@ -49,7 +55,7 @@ func (t TestBox) Test(language, code, input, expected string) map[string]bool {
 	_ = timeTaken
 	result := splitOutput[0]
 
-	return compareLineByLine(input, expected, result)
+	return compareLineByLine(input, expected, result), Message{"success", "testBox", "compilation took " + timeTaken + " seconds"}
 }
 
 func compareLineByLine(input, exp, res string) map[string]bool {

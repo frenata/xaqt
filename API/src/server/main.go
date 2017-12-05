@@ -22,6 +22,7 @@ type SubmissionRequest struct {
 
 type SubmissionResponse struct {
 	PassedTests map[string]bool `json:"passFail"`
+	Error       testbox.Message `json:"error"`
 }
 
 var box testbox.TestBox
@@ -34,6 +35,7 @@ func main() {
 	http.HandleFunc("/", getTest)
 	http.HandleFunc("/submit/", submitTest)
 
+	log.Println("TestBox listening on " + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
@@ -67,13 +69,13 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 	test := challenges[submission.Id]
 	stdin, stdout := test.StdIO()
 
-	passed := box.Test(submission.Language, submission.Code, stdin, stdout)
-	log.Println(passed)
+	passed, msg := box.Test(submission.Language, submission.Code, stdin, stdout)
+	log.Println(passed, msg)
 
-	json, _ := json.MarshalIndent(SubmissionResponse{passed}, "", "   ")
+	buf, _ := json.MarshalIndent(SubmissionResponse{passed, msg}, "", "   ")
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(json))
+	w.Write(buf)
 }
 
 var challenges map[id]Test
