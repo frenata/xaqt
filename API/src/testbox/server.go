@@ -35,11 +35,11 @@ func New(languagesFile string) TestBox {
 
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
-func (t TestBox) Test(language, code, input, expected string) (map[string]bool, Message) {
+func (t TestBox) run(language, code, input string) (string, Message) {
 	lang := t.languageMap[language]
 
 	if code == "" {
-		return nil, Message{"error", "testBox", "no code submitted"}
+		return "", Message{"error", "testBox", "no code submitted"}
 	}
 
 	sb := NewSandbox(lang, code, input, DefaultSandboxOptions())
@@ -47,23 +47,34 @@ func (t TestBox) Test(language, code, input, expected string) (map[string]bool, 
 	output, err := sb.Run()
 	if err != nil {
 		log.Println(err)
-		return nil, Message{"error", "testBox", fmt.Sprintf("%s", err)}
+		return "", Message{"error", "testBox", fmt.Sprintf("%s", err)}
 	}
 
 	splitOutput := strings.SplitN(output, "*-COMPILEBOX::ENDOFOUTPUT-*", 2)
 	timeTaken := splitOutput[1]
-	_ = timeTaken
 	result := splitOutput[0]
 
-	return compareLineByLine(input, expected, result), Message{"success", "testBox", "compilation took " + timeTaken + " seconds"}
+	return result, Message{"success", "testBox", "compilation took " + timeTaken + " seconds"}
 }
 
-func compareLineByLine(input, exp, res string) map[string]bool {
+func (t TestBox) StdOut(language, code, input string) (map[string]string, Message) {
+	result, msg := t.run(language, code, input)
+
+	return mapInToOut(input, result), msg
+}
+
+func (t TestBox) Test(language, code, input, expected string) (map[string]string, Message) {
+	result, msg := t.run(language, code, input)
+
+	return compareLineByLine(input, expected, result), msg
+}
+
+func compareLineByLine(input, exp, res string) map[string]string {
 	inpSlice := strings.Split(input, "\n")
 	expSlice := strings.Split(exp, "\n")
 	resSlice := strings.Split(res, "\n")
 
-	results := make(map[string]bool, len(expSlice))
+	results := make(map[string]string, len(expSlice))
 
 	// TODO deal with partial success but incorrect result couont
 	/*if len(expSlice) != len(resSlice) {
@@ -72,7 +83,26 @@ func compareLineByLine(input, exp, res string) map[string]bool {
 
 	for i := 0; i < len(inpSlice)-1; i++ {
 		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
-		results[inpSlice[i]] = expSlice[i] == resSlice[i]
+		results[inpSlice[i]] = fmt.Sprintf("%v", expSlice[i] == resSlice[i])
+	}
+
+	return results
+}
+
+func mapInToOut(input, res string) map[string]string {
+	inpSlice := strings.Split(input, "\n")
+	resSlice := strings.Split(res, "\n")
+
+	results := make(map[string]string, len(inpSlice))
+
+	// TODO deal with partial success but incorrect result couont
+	/*if len(expSlice) != len(resSlice) {
+		return results
+	}*/
+
+	for i := 0; i < len(inpSlice)-1; i++ {
+		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
+		results[inpSlice[i]] = resSlice[i]
 	}
 
 	return results

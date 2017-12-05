@@ -37,8 +37,10 @@ func main() {
 
 	for lang, code := range compilerTests {
 		out, msg := box.Test(lang, code, stdin, expected)
+		oOut, oMsg := box.StdOut(lang, code, stdin)
 		log.Println(out, msg)
-		if out[""] == true {
+		log.Println(oOut, oMsg)
+		if out[""] == "true" {
 			//log.Printf("%s passed 'Hello' test.", lang)
 		} else {
 			log.Println(out)
