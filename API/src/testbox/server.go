@@ -36,7 +36,10 @@ func New(languagesFile string) TestBox {
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
 func (t TestBox) run(language, code, input string) (string, Message) {
-	lang := t.languageMap[language]
+	lang, ok := t.languageMap[language]
+	if !ok {
+		return "", Message{"error", "testBox", "language not recognized"}
+	}
 
 	if code == "" {
 		return "", Message{"error", "testBox", "no code submitted"}
