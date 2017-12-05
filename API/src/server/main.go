@@ -21,7 +21,7 @@ type SubmissionRequest struct {
 }
 
 type SubmissionResponse struct {
-	PassedTests map[string]bool `json:"passedTests"`
+	PassedTests map[string]bool `json:"passFail"`
 }
 
 var box testbox.TestBox
