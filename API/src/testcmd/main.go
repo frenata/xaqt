@@ -9,16 +9,16 @@ func main() {
 	box := testbox.New("data/compilers.json")
 	compilerTests := make(map[string]string)
 
-	compilerTests["C++"] = "#include <iostream>\nusing namespace std;\n\nint main() {\n\tcout<<\"Hello\";\n\treturn 0;\n}"
-	compilerTests["Perl"] = "use strict;\nuse warnings\n;use v5.14; say 'Hello';"
-	compilerTests["Java"] = "\n\nimport java.io.*;\n\nclass myCode\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\t\t\n\t\tSystem.out.println(\"Hello\");\n\t}\n}"
-	compilerTests["C#"] = "using System;\n\npublic class Test\n{\n\tpublic static void Main()\n\t{\n\t\t\tConsole.WriteLine(\"Hello\");\n\t}\n}"
-	compilerTests["Clojure"] = "(println \"Hello\")"
-	compilerTests["Go"] = "package main\nimport \"fmt\"\n\nfunc main(){\n  \n\tfmt.Printf(\"Hello\")\n}"
-	compilerTests["Nodejs"] = "console.log(\"Hello\");"
+	//compilerTests["C++"] = "#include <iostream>\nusing namespace std;\n\nint main() {\n\tcout<<\"Hello\";\n\treturn 0;\n}"
+	//compilerTests["Perl"] = "use strict;\nuse warnings\n;use v5.14; say 'Hello';"
+	//compilerTests["Java"] = "\n\nimport java.io.*;\n\nclass myCode\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\t\t\n\t\tSystem.out.println(\"Hello\");\n\t}\n}"
+	//compilerTests["C#"] = "using System;\n\npublic class Test\n{\n\tpublic static void Main()\n\t{\n\t\t\tConsole.WriteLine(\"Hello\");\n\t}\n}"
+	//compilerTests["Clojure"] = "(println \"Hello\")"
+	//compilerTests["Go"] = "package main\nimport \"fmt\"\n\nfunc main(){\n  \n\tfmt.Printf(\"Hello\")\n}"
+	//compilerTests["Nodejs"] = "console.log(\"Hello\");"
 	compilerTests["Python"] = "print \"Hello\""
-	compilerTests["Ruby"] = "puts \"Hello\""
-	compilerTests["Bash"] = "echo 'Hello' "
+	//compilerTests["Ruby"] = "puts \"Hello\""
+	//compilerTests["Bash"] = "echo 'Hello' "
 	// FIXME
 	//compilerTests["Scala"] = "object HelloWorld {def main(args: Array[String]) = println(\"Hello\")}"
 	// FIXME compiler
@@ -37,7 +37,7 @@ func main() {
 
 	for lang, code := range compilerTests {
 		out, msg := box.Test(lang, code, stdin, expected)
-		oOut, oMsg := box.StdOut(lang, code, stdin)
+		oOut, oMsg := box.StdOut(lang, code, "test")
 		log.Println(out, msg)
 		log.Println(oOut, oMsg)
 		if out[""] == "true" {

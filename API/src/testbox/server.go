@@ -42,6 +42,10 @@ func (t TestBox) run(language, code, input string) (string, Message) {
 		return "", Message{"error", "testBox", "no code submitted"}
 	}
 
+	if !strings.HasSuffix(input, "\n") {
+		input = input + "\n"
+	}
+
 	sb := NewSandbox(lang, code, input, DefaultSandboxOptions())
 
 	output, err := sb.Run()
@@ -104,7 +108,7 @@ func mapInToOut(input, res string) map[string]string {
 		return results
 	}*/
 
-	for i := 0; i < len(inpSlice)-1; i++ {
+	for i := 0; i < len(inpSlice); i++ {
 		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
 		if i > len(resSlice)-1 {
 			results[inpSlice[i]] = "NO OUTPUT"
