@@ -23,5 +23,74 @@
             "boot": "false",
             "":"false"
         }
+    },
+    "4": {
+        "description": "calculate hamming distance",
+        "io": {
+            "GATTACA\tGATTACA": "0",
+            "GG\tAA": "2",
+            "ACCAGGG\tACTATGG": "2",
+            "TAGC\tCGAT":"4",
+            "AATG\tAAA": "-1"
+        }
+    },
+    "5": {
+        "description": "is it an isogram?",
+        "io":{
+            "isogram":"true",
+            "eleven":"false",
+            "Alphabet":"false",
+            "six-year-old":"true",
+            "accentor":"false"
+        }
+    },
+    "6": {
+        "description": "difference between the square of the sum and the sum of the squares of the first N natural numbers",
+        "io":{
+            "1":"0",
+            "5":"170",
+            "100":"25164150"
+        }
+    },
+    "7": {
+        "description": "make an acronym",
+        "io": {
+            "Portable Network Graphics":"PNG",
+            "Ruby on Rails":"ROR",
+            "First In, First Out":"FIFO",
+            "PHP: Hypertext Preprocessor":"PHP",
+            "GNU Image Manipulation Program":"GIMP",
+            "Complementary metal-oxide semiconductor":"CMOS"
+        }
+    },
+    "8": {
+        "description": "validate phone numbers",
+        "io": {
+            "(123) 456-7890":"1234567890",
+            "123.456.7890":"1234567890",
+            "123456789":"error",
+            "11234567890":"1234567890",
+            "123-@:!-7890":"error"
+        }
+    },
+    "9": {
+        "description": "atbash cipher",
+        "io": {
+            "encode\tno":"ml",
+            "encode\tmindblowingly": "nrmwy oldrm tob",
+            "encode\tTruth is fiction.": "gifgs rhurx grlm",
+            "decode\tzmlyh gzxov rhlug vmzhg vkkrm thglm v": "anobstacleisoftenasteppingstone",
+            "decode\tgvhgr mt123 gvhgr mt": "testing123testing"
+        }
+    },
+    "10": {
+        "description": "can these queens attack each other?",
+        "io": {
+            "b4\tb4": false,
+            "a8\tb9": false,
+            "b4\tb7": true,
+            "a1\tf6": true,
+            "b3\td7": false
+        }
     }
 }
