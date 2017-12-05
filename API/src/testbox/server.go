@@ -83,7 +83,11 @@ func compareLineByLine(input, exp, res string) map[string]string {
 
 	for i := 0; i < len(inpSlice)-1; i++ {
 		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
-		results[inpSlice[i]] = fmt.Sprintf("%v", expSlice[i] == resSlice[i])
+		if i > len(expSlice)-1 || i > len(resSlice)-1 {
+			results[inpSlice[i]] = "false"
+		} else {
+			results[inpSlice[i]] = fmt.Sprintf("%v", expSlice[i] == resSlice[i])
+		}
 	}
 
 	return results
@@ -102,7 +106,11 @@ func mapInToOut(input, res string) map[string]string {
 
 	for i := 0; i < len(inpSlice)-1; i++ {
 		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
-		results[inpSlice[i]] = resSlice[i]
+		if i > len(resSlice)-1 {
+			results[inpSlice[i]] = "NO OUTPUT"
+		} else {
+			results[inpSlice[i]] = resSlice[i]
+		}
 	}
 
 	return results
