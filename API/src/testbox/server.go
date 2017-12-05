@@ -42,10 +42,6 @@ func (t TestBox) run(language, code, input string) (string, Message) {
 		return "", Message{"error", "testBox", "no code submitted"}
 	}
 
-	if !strings.HasSuffix(input, "\n") {
-		input = input + "\n"
-	}
-
 	sb := NewSandbox(lang, code, input, DefaultSandboxOptions())
 
 	output, err := sb.Run()
@@ -62,12 +58,18 @@ func (t TestBox) run(language, code, input string) (string, Message) {
 }
 
 func (t TestBox) StdOut(language, code, input string) (map[string]string, Message) {
+	if !strings.HasSuffix(input, "\n") {
+		input = input + "\n"
+	}
 	result, msg := t.run(language, code, input)
 
 	return mapInToOut(input, result), msg
 }
 
 func (t TestBox) Test(language, code, input, expected string) (map[string]string, Message) {
+	if !strings.HasSuffix(input, "\n") {
+		input = input + "\n"
+	}
 	result, msg := t.run(language, code, input)
 
 	return compareLineByLine(input, expected, result), msg
