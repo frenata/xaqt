@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"testbox"
@@ -41,31 +42,35 @@ func main() {
 	http.HandleFunc("/submit/", submitTest)
 	http.HandleFunc("/stdout/", getStdout)
 	http.HandleFunc("/languages/", getLangs)
-	// TODO: add languages endpoint
 
 	log.Println("TestBox listening on " + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 func getTest(w http.ResponseWriter, r *http.Request) {
-	var test Test
-	var testid id
-
-	// ranging as a quick way to get a random map entry
-	for k, v := range challenges {
-		testid = k
-		test = v
-		break
+	log.Println("Received request for test...")
+	testids := make([]id, len(challenges))
+	i := 0
+	for k := range challenges {
+		testids[i] = k
+		i++
 	}
+
+	n := rand.Intn(len(testids))
+	testid := testids[n]
+	test := challenges[testid]
 
 	tr := TestResponse{testid, test.Description}
 	json, _ := json.MarshalIndent(tr, "", "    ")
+
+	log.Printf("Handing out test %s:\n%s", testid, test.Description)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(json)
 }
 
 func getStdout(w http.ResponseWriter, r *http.Request) {
+	log.Println("Received request for stdout")
 	decoder := json.NewDecoder(r.Body)
 	var submission SubmissionRequest
 	err := decoder.Decode(&submission)
@@ -84,6 +89,7 @@ func getStdout(w http.ResponseWriter, r *http.Request) {
 }
 
 func submitTest(w http.ResponseWriter, r *http.Request) {
+	log.Println("Received challenge submission")
 	decoder := json.NewDecoder(r.Body)
 	var submission SubmissionRequest
 	err := decoder.Decode(&submission)
@@ -105,6 +111,7 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 }
 
 func getLangs(w http.ResponseWriter, r *http.Request) {
+	log.Println("Received languages request")
 	langs := make([]string, 0)
 
 	for k := range box.LanguageMap {
@@ -121,6 +128,7 @@ func getLangs(w http.ResponseWriter, r *http.Request) {
 var challenges map[id]Test
 
 func init() {
+	log.Println("Reading challenges file...")
 	bytes, err := ioutil.ReadFile("data/challenges.json")
 	if err != nil {
 		panic(err)
@@ -131,5 +139,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-
+	log.Println("Challenges file loaded.")
 }
