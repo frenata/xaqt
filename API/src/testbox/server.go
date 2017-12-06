@@ -10,7 +10,7 @@ import (
 )
 
 type TestBox struct {
-	languageMap map[string]Language
+	LanguageMap map[string]Language
 }
 
 type Message struct {
@@ -37,7 +37,7 @@ func New(languagesFile string) TestBox {
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
 func (t TestBox) run(language, code, input string) (string, Message) {
-	lang, ok := t.languageMap[strings.ToLower(language)]
+	lang, ok := t.LanguageMap[strings.ToLower(language)]
 	if !ok {
 		return "", Message{"error", "testBox", "language not recognized"}
 	}

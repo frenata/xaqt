@@ -26,6 +26,10 @@ type SubmissionResponse struct {
 	Error  testbox.Message   `json:"error"`
 }
 
+type LanguagesResponse struct {
+	Languages []string `json:"languages"`
+}
+
 var box testbox.TestBox
 
 func main() {
@@ -36,6 +40,7 @@ func main() {
 	http.HandleFunc("/", getTest)
 	http.HandleFunc("/submit/", submitTest)
 	http.HandleFunc("/stdout/", getStdout)
+	http.HandleFunc("/languages/", getLangs)
 	// TODO: add languages endpoint
 
 	log.Println("TestBox listening on " + port)
@@ -94,6 +99,20 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 	log.Println(passed, msg)
 
 	buf, _ := json.MarshalIndent(SubmissionResponse{passed, msg}, "", "   ")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(buf)
+}
+
+func getLangs(w http.ResponseWriter, r *http.Request) {
+	langs := make([]string, 0)
+
+	for k := range box.LanguageMap {
+		langs = append(langs, k)
+	}
+
+	log.Println(langs)
+	buf, _ := json.MarshalIndent(LanguagesResponse{langs}, "", "   ")
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(buf)

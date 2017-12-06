@@ -23,17 +23,9 @@
         "compiler": "clojure",
         "sourceFile": "file.clj"
     },
-    "php": {
-        "compiler": "php",
-        "sourceFile": "file.php"
-    },
     "javascript": {
         "compiler": "nodejs",
         "sourceFile": "file.js"
-    },
-    "scala": {
-        "compiler": "scala",
-        "sourceFile": "file.scala"
     },
     "c++": {
         "compiler": "g++ -o /usercode/a.out",
@@ -48,12 +40,6 @@
     "perl": {
         "compiler": "perl",
         "sourceFile": "file.pl"
-    },
-    "rust": {
-        "compiler": "'HOME=/opt/rust /opt/rust/.cargo/bin/rustc'",
-        "sourceFile": "file.rs",
-        "optionalExecutable": "/usercode/a.out",
-        "compilerFlags": "-o /usercode/a.out"
     },
     "c#": {
         "compiler": "gmcs",
