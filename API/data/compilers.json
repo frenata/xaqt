@@ -1,62 +1,66 @@
 {
-    "Python": {
+    "python": {
         "compiler": "python",
         "sourceFile": "file.py"
-        },
-    "Go" : {
+    },
+    "go" : {
         "compiler": "go run",
         "sourceFile": "file.go"
-        },
-    "Nodejs": {
+    },
+    "golang" : {
+        "compiler": "go run",
+        "sourceFile": "file.go"
+    },
+    "nodejs": {
         "compiler": "nodejs",
         "sourceFile": "file.js"
     },
-    "Ruby": {
+    "ruby": {
         "compiler": "ruby",
         "sourceFile": "file.rb"
     },
-    "Clojure": {
+    "clojure": {
         "compiler": "clojure",
         "sourceFile": "file.clj"
     },
-    "Php": {
+    "php": {
         "compiler": "php",
         "sourceFile": "file.php"
     },
-    "Nodejs": {
+    "javascript": {
         "compiler": "nodejs",
         "sourceFile": "file.js"
     },
-    "Scala": {
+    "scala": {
         "compiler": "scala",
         "sourceFile": "file.scala"
     },
-    "C++": {
+    "c++": {
         "compiler": "g++ -o /usercode/a.out",
         "sourceFile": "file.cpp",
         "optionalExecutable": "/usercode/a.out"
     },
-    "Java": {
+    "java": {
         "compiler": "javac",
         "sourceFile": "file.java",
         "optionalExecutable": "/usercode/javaRunner.sh"
     },
-    "Perl": {
+    "perl": {
         "compiler": "perl",
         "sourceFile": "file.pl"
     },
-    "Rust": {
+    "rust": {
         "compiler": "'HOME=/opt/rust /opt/rust/.cargo/bin/rustc'",
         "sourceFile": "file.rs",
         "optionalExecutable": "/usercode/a.out",
         "compilerFlags": "-o /usercode/a.out"
     },
-    "C#": {
+    "c#": {
         "compiler": "gmcs",
         "sourceFile": "file.cs",
         "optionalExecutable": "mono /usercode/file.exe"
     },
-    "Bash": {
+    "bash": {
         "compiler": "/bin/bash",
         "sourceFile": "file.sh"
     }
