@@ -92,5 +92,133 @@
             "a1\tf6": "true",
             "b3\td7": "false"
         }
+    },
+    "11": {
+        "description": "find the last element of a list",
+        "tags": [
+            "lists",
+            "easy"
+        ],
+        "io": {
+            "[1,2,3,4,5,6]":"6",
+            "[1]":"1",
+            "[\"foo\", \"bar\", \"baz\"]": "baz",
+            "['a','b']":"b"
+        }
+    },
+    "12": {
+        "description": "find the last element (but one!) of a list",
+        "tags": [
+            "lists",
+            "easy"
+        ],
+        "io": {
+            "[1,2,3,4,5,6]":"5",
+            "[\"foo\", \"bar\", \"baz\"]": "bar",
+            "['a','b']":"a"
+        }
+    },
+    "13": {
+        "description": "find the nth element (1-indexed) of a list",
+        "tags": [
+            "lists",
+            "easy"
+        ],
+        "io": {
+            "[1,2,3,4,5,6]\t3":"3",
+            "[\"foo\", \"bar\", \"baz\"]\t1": "foo",
+            "['a','b']\t2":"b",
+            "[1]\t1":"1"
+        }
+    },
+    "14": {
+        "description": "flatten a list",
+        "tags": [
+            "lists",
+            "medium"
+        ],
+        "io": {
+            "[1,[2,3]]":"[1,2,3]",
+            "[1,2]":"[1,2]",
+            "[]":"[]",
+            "[[[3]]]":"[3]",
+            "[4,[5,[6],6],8]":"[4,5,6,6,8]"
+        }
+    },
+    "15": {
+        "description": "eliminate consectutive duplicates in a list",
+        "tags": [
+            "lists",
+            "medium"
+        ],
+        "io": {
+            "1111":"1",
+            "11223344":"1234",
+            "111121111":"121"
+        }
+    },
+    "16": {
+        "description": "pack consecutive duplicates into sublists",
+        "tags": [
+            "lists",
+            "medium"
+        ],
+        "io": {
+            "1111":"[1111]",
+            "11223344":"[11,22,33,44]",
+            "111121111":"[1111,2,1111]"
+        }
+    },
+    "17": {
+        "description": "pack consectutive duplicates into a run length encoding list; singletons should be tagged with a number",
+        "tags": [
+            "lists",
+            "hard"
+        ],
+        "io": {
+            "1":"[(1,1)]",
+            "1111":"[(4,1)]",
+            "11223344":"[(2,1),(2,2),(2,3),(2,4)]",
+            "111121111":"[(4,1),(1,2),(4,1)]"
+        }
+    },
+    "18": {
+        "description": "pack consectutive duplicates into a run length encoding list; singletons should *not* be tagged with a number",
+        "tags": [
+            "lists",
+            "hard"
+        ],
+        "io": {
+            "1":"[1]",
+            "1111":"[(4,1)]",
+            "112334":"[(2,1),2,(2,3),4]",
+            "111121111":"[(4,1),2,(4,1)]"
+        }
+    },
+    "19": {
+        "description": "decode a run length encoding list",
+        "tags": [
+            "lists",
+            "hard"
+        ],
+        "io": {
+            "[1]":"1",
+            "[(4,1)]":"1111",
+            "[(2,1),2,(2,3),4]":"112334",
+            "[(4,1),2,(4,1)]":"111121111"
+        }
+    },
+    "20": {
+        "description": "duplicate each character of a string",
+        "tags": [
+            "lists",
+            "medium"
+        ],
+        "io": {
+            "123":"112233",
+            "abc":"aabbcc",
+            "aabbcc":"aaaabbbbcccc",
+            "*":"**"
+        }
     }
 }
