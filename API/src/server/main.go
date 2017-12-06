@@ -36,6 +36,7 @@ func main() {
 	http.HandleFunc("/", getTest)
 	http.HandleFunc("/submit/", submitTest)
 	http.HandleFunc("/stdout/", getStdout)
+	// TODO: add languages endpoint
 
 	log.Println("TestBox listening on " + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

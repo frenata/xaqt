@@ -37,7 +37,7 @@ func New(languagesFile string) TestBox {
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
 func (t TestBox) run(language, code, input string) (string, Message) {
-	lang, ok := t.languageMap[language]
+	lang, ok := t.languageMap[strings.ToLower(language)]
 	if !ok {
 		return "", Message{"error", "testBox", "language not recognized"}
 	}
@@ -134,13 +134,10 @@ func mapInToOut(input, res string) map[string]string {
 	results := make(map[string]string, len(inpSlice))
 
 	// TODO deal with partial success but incorrect result couont
-	/*if len(expSlice) != len(resSlice) {
-		return results
-	}*/
 
-	for i := 0; i < len(inpSlice); i++ {
+	for i := 0; i < len(inpSlice)-1; i++ {
 		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
-		if i > len(resSlice)-1 {
+		if i > len(resSlice)-2 {
 			results[inpSlice[i]] = "NO OUTPUT"
 		} else {
 			results[inpSlice[i]] = resSlice[i]
