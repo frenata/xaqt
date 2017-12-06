@@ -24,7 +24,7 @@ type SubmissionRequest struct {
 
 type SubmissionResponse struct {
 	Output map[string]string `json:"passFail"`
-	Error  testbox.Message   `json:"error"`
+	Error  testbox.Message   `json:"message"`
 }
 
 type LanguagesResponse struct {

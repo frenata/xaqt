@@ -1,6 +1,10 @@
 {
     "1": {
         "description": "echo stdin",
+        "tags": [
+            "strings",
+            "easy"
+        ],
         "io": {
             "not-test":"not-test",
             "test":"test"
@@ -8,6 +12,10 @@
     },
     "2": {
         "description": "reverse the string",
+        "tags": [
+            "strings",
+            "easy"
+        ],
         "io": {
             "1": "1",
             "toggle": "elggot",
@@ -16,6 +24,10 @@
     },
     "3": {
         "description": "is it a palindrome?",
+        "tags": [
+            "strings",
+            "medium"
+        ],
         "io": {
             "bob": "true",
             "canal": "false",
@@ -26,6 +38,10 @@
     },
     "4": {
         "description": "calculate hamming distance",
+        "tags": [
+            "strings",
+            "medium"
+        ],
         "io": {
             "GATTACA\tGATTACA": "0",
             "GG\tAA": "2",
@@ -36,6 +52,10 @@
     },
     "5": {
         "description": "is it an isogram?",
+        "tags": [
+            "strings",
+            "medium"
+        ],
         "io":{
             "isogram":"true",
             "eleven":"false",
@@ -46,6 +66,10 @@
     },
     "6": {
         "description": "difference between the square of the sum and the sum of the squares of the first N natural numbers",
+        "tags": [
+            "math",
+            "medium"
+        ],
         "io":{
             "1":"0",
             "5":"170",
@@ -54,6 +78,10 @@
     },
     "7": {
         "description": "make an acronym",
+        "tags": [
+            "strings",
+            "medium"
+        ],
         "io": {
             "Portable Network Graphics":"PNG",
             "Ruby on Rails":"ROR",
@@ -65,6 +93,10 @@
     },
     "8": {
         "description": "validate phone numbers",
+        "tags": [
+            "validation",
+            "medium"
+        ],
         "io": {
             "(123) 456-7890":"1234567890",
             "123.456.7890":"1234567890",
@@ -75,6 +107,10 @@
     },
     "9": {
         "description": "atbash cipher",
+        "tags": [
+            "crypto",
+            "hard"
+        ],
         "io": {
             "encode\tno":"ml",
             "encode\tmindblowingly": "nrmwy oldrm tob",
@@ -85,6 +121,10 @@
     },
     "10": {
         "description": "can these queens attack each other?",
+        "tags": [
+            "chess",
+            "hard"
+        ],
         "io": {
             "b4\tb4": "false",
             "a8\tb9": "false",
