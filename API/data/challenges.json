@@ -38,16 +38,16 @@
     },
     "4": {
         "description": "Give two strings, calculate the hamming distance.",
-        "sampleio":"ACCAGGG\tACTATGG -> 2",
+        "sampleio":"ACCAGGG|ACTATGG -> 2",
         "tags": [
             "strings",
             "medium"
         ],
         "io": {
-            "GATTACA\tGATTACA": "0",
-            "GG\tAA": "2",
-            "TAGC\tCGAT":"4",
-            "AATG\tAAA": "2"
+            "GATTACA|GATTACA": "0",
+            "GG|AA": "2",
+            "TAGC|CGAT":"4",
+            "AATG|AAA": "2"
         }
     },
     "5": {
@@ -123,11 +123,11 @@
             "hard"
         ],
         "io": {
-            "b4\tb4": "false",
-            "a8\tb9": "false",
-            "b4\tb7": "true",
-            "a1\tf6": "true",
-            "b3\td7": "false"
+            "b4|b4": "false",
+            "a8|b9": "false",
+            "b4|b7": "true",
+            "a1|f6": "true",
+            "b3|d7": "false"
         }
     },
     "11": {
@@ -162,10 +162,10 @@
             "trivial"
         ],
         "io": {
-            "[1,2,3,4,5,6]\t3":"3",
-            "[\"foo\", \"bar\", \"baz\"]\t1": "foo",
-            "['a','b']\t2":"b",
-            "[1]\t1":"1"
+            "[1,2,3,4,5,6]|3":"3",
+            "[\"foo\", \"bar\", \"baz\"]|1": "foo",
+            "['a','b']|2":"b",
+            "[1]|1":"1"
         }
     },
     "14": {
@@ -273,14 +273,14 @@
 	},
     "22": {
             "description": "First input is a search term, second input is a list. Return 'true' if term occurs in list, else 'false'",
-            "sampleio":"dog\tcat,mouse,donky,dog -> true",
+            "sampleio":"dog|cat,mouse,donky,dog -> true",
             "tags": [
                 "trivial",
                 "search"
             ],
             "io": {
-                "1\t5,33,2,6,1,2":"true",
-                "1\t5,33,2,6,5,2":"false"
+                "1|5,33,2,6,1,2":"true",
+                "1|5,33,2,6,5,2":"false"
             }
         }
 

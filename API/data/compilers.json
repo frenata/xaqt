@@ -2,24 +2,13 @@
     "python": {
         "compiler": "python",
         "sourceFile": "file.py",
-        "boilerplate": "import sys\ninput = sys.stdin.read().split('\t')\n",
+        "boilerplate": "import sys\ninput = sys.stdin.read()\nargs = input.split('|')\n",
         "commentPrefix": "#"
-    },
-    "go" : {
-        "compiler": "go run",
-        "sourceFile": "file.go",
-        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\n')\nvar args = strings.Split(input, \"\\t\")\n",
-        "commentPrefix": "\/\/"
     },
     "golang" : {
         "compiler": "go run",
         "sourceFile": "file.go",
-        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\n')\nvar args = strings.Split(input, \"\\t\")\n",
-        "commentPrefix": "\/\/"
-    },
-    "nodejs": {
-        "compiler": "nodejs",
-        "sourceFile": "file.js",
+        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\\n')\nvar args = strings.Split(input, \"|\")\n",
         "commentPrefix": "\/\/"
     },
     "ruby": {
