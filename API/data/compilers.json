@@ -2,58 +2,67 @@
     "python": {
         "compiler": "python",
         "sourceFile": "file.py",
-        "boilerplate": "import sys\ninput = sys.stdin.read()\n",
+        "boilerplate": "import sys\ninput = sys.stdin.read().split('\t')\n",
         "commentPrefix": "#"
     },
     "go" : {
         "compiler": "go run",
         "sourceFile": "file.go",
-        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\n')\n",
-        "commentPrefix": "\\\\"
+        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\n')\nvar args = strings.Split(input, \"\\t\")\n",
+        "commentPrefix": "\/\/"
     },
     "golang" : {
         "compiler": "go run",
         "sourceFile": "file.go",
-        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\n')\n",
-        "commentPrefix": "\\\\"
+        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\n')\nvar args = strings.Split(input, \"\\t\")\n",
+        "commentPrefix": "\/\/"
     },
     "nodejs": {
         "compiler": "nodejs",
-        "sourceFile": "file.js"
+        "sourceFile": "file.js",
+        "commentPrefix": "\/\/"
     },
     "ruby": {
         "compiler": "ruby",
-        "sourceFile": "file.rb"
+        "sourceFile": "file.rb",
+        "commentPrefix": "#"
     },
     "clojure": {
         "compiler": "clojure",
-        "sourceFile": "file.clj"
+        "sourceFile": "file.clj",
+        "commentPrefix": ";"
     },
     "javascript": {
         "compiler": "nodejs",
-        "sourceFile": "file.js"
+        "sourceFile": "file.js",
+        "commentPrefix": "\/\/"
     },
     "c++": {
         "compiler": "g++ -o /usercode/a.out",
         "sourceFile": "file.cpp",
-        "optionalExecutable": "/usercode/a.out"
+        "optionalExecutable": "/usercode/a.out",
+        "commentPrefix": "\/\/"
     },
     "java": {
         "compiler": "javac",
         "sourceFile": "file.java",
-        "optionalExecutable": "/usercode/javaRunner.sh"
+        "optionalExecutable": "/usercode/javaRunner.sh",
+        "commentPrefix": "\/\/"
     },
     "perl": {
         "compiler": "perl",
-        "sourceFile": "file.pl"
+        "sourceFile": "file.pl",
+        "commentPrefix": "#"
     },
     "c#": {
         "compiler": "gmcs",
         "sourceFile": "file.cs",
-        "optionalExecutable": "mono /usercode/file.exe"
+        "optionalExecutable": "mono /usercode/file.exe",
+        "commentPrefix": "\/\/"
     },
     "bash": {
         "compiler": "/bin/bash",
-        "sourceFile": "file.sh"
+        "sourceFile": "file.sh",
+        "commentPrefix": "#"
     }
 }
