@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"testbox"
+	"time"
 )
 
 type TestResponse struct {
@@ -57,6 +58,7 @@ func getTest(w http.ResponseWriter, r *http.Request) {
 		i++
 	}
 
+	rand.Seed(time.Now().UTC().UnixNano())
 	n := rand.Intn(len(testids))
 	testid := testids[n]
 	test := challenges[testid]
