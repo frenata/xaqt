@@ -3,7 +3,7 @@
         "description": "echo stdin",
         "tags": [
             "strings",
-            "easy"
+            "trivial"
         ],
         "io": {
             "not-test":"not-test",
@@ -11,10 +11,10 @@
         }
     },
     "2": {
-        "description": "reverse the string",
+        "description": "Return the reverse of input string",
         "tags": [
             "strings",
-            "easy"
+            "trivial"
         ],
         "io": {
             "1": "1",
@@ -23,7 +23,7 @@
         }
     },
     "3": {
-        "description": "is it a palindrome?",
+        "description": "If input is a palindrome, return 'true', else 'false'",
         "tags": [
             "strings",
             "medium"
@@ -37,7 +37,8 @@
         }
     },
     "4": {
-        "description": "calculate hamming distance",
+        "description": "Give two strings, calculate the hamming distance.",
+        "sampleio":"ACCAGGG\tACTATGG -> 2",
         "tags": [
             "strings",
             "medium"
@@ -45,13 +46,12 @@
         "io": {
             "GATTACA\tGATTACA": "0",
             "GG\tAA": "2",
-            "ACCAGGG\tACTATGG": "2",
             "TAGC\tCGAT":"4",
-            "AATG\tAAA": "-1"
+            "AATG\tAAA": "2"
         }
     },
     "5": {
-        "description": "is it an isogram?",
+        "description": "If input is an isogram, return 'true', else 'false'",
         "tags": [
             "strings",
             "medium"
@@ -65,26 +65,26 @@
         }
     },
     "6": {
-        "description": "difference between the square of the sum and the sum of the squares of the first N natural numbers",
-        "tags": [
+        "description": "Given N, return the difference between the square of the sum and the sum of the squares of the first N natural numbers",
+        "sampleio":"5 -> 170",
+		  "tags": [
             "math",
             "medium"
         ],
         "io":{
             "1":"0",
-            "5":"170",
             "100":"25164150"
         }
     },
     "7": {
-        "description": "make an acronym",
+        "description": "Return an acronym for the input",
+		  "sampleio" : "Ruby on Rails -> ROR",
         "tags": [
             "strings",
             "medium"
         ],
         "io": {
             "Portable Network Graphics":"PNG",
-            "Ruby on Rails":"ROR",
             "First In, First Out":"FIFO",
             "PHP: Hypertext Preprocessor":"PHP",
             "GNU Image Manipulation Program":"GIMP",
@@ -92,31 +92,28 @@
         }
     },
     "8": {
-        "description": "validate phone numbers",
-        "tags": [
+        "description": "If input is a valid U.S. phone number (incl. area code), return just the digits. Otherwise return 'error'",
+        "sampleio" : "123.456.7890 -> 1234567890, 123456789 -> 'error'",
+		  "tags": [
             "validation",
             "medium"
         ],
         "io": {
             "(123) 456-7890":"1234567890",
-            "123.456.7890":"1234567890",
-            "123456789":"error",
             "11234567890":"1234567890",
             "123-@:!-7890":"error"
         }
     },
     "9": {
-        "description": "atbash cipher",
+        "description": "Return input encrypted using an atbash cipher",
         "tags": [
             "crypto",
             "hard"
         ],
         "io": {
-            "encode\tno":"ml",
-            "encode\tmindblowingly": "nrmwy oldrm tob",
-            "encode\tTruth is fiction.": "gifgs rhurx grlm",
-            "decode\tzmlyh gzxov rhlug vmzhg vkkrm thglm v": "anobstacleisoftenasteppingstone",
-            "decode\tgvhgr mt123 gvhgr mt": "testing123testing"
+            "no":"ml",
+            "mindblowingly": "nrmwyoldrmtob",
+            "Truth is fiction.": "Gifgs rh urxgrlm."
         }
     },
     "10": {
@@ -137,7 +134,7 @@
         "description": "find the last element of a list",
         "tags": [
             "lists",
-            "easy"
+            "trivial"
         ],
         "io": {
             "[1,2,3,4,5,6]":"6",
@@ -147,10 +144,10 @@
         }
     },
     "12": {
-        "description": "find the last element (but one!) of a list",
+        "description": "Return the second to last element of input list",
         "tags": [
             "lists",
-            "easy"
+            "trivial"
         ],
         "io": {
             "[1,2,3,4,5,6]":"5",
@@ -162,7 +159,7 @@
         "description": "find the nth element (1-indexed) of a list",
         "tags": [
             "lists",
-            "easy"
+            "trivial"
         ],
         "io": {
             "[1,2,3,4,5,6]\t3":"3",
@@ -249,7 +246,7 @@
         }
     },
     "20": {
-        "description": "duplicate each character of a string",
+        "description": "Return the input string with each character doubled.",
         "tags": [
             "lists",
             "medium"
@@ -260,5 +257,31 @@
             "aabbcc":"aaaabbbbcccc",
             "*":"**"
         }
-    }
+    },
+	 "21": {
+			"description":"Return the largest element in the input list",
+		  "sampleio": "1,4,5,2 -> 5",
+		  "tags": [
+					 "lists",
+					 "trivial"
+		  ],
+		  "io": {
+					 "10,4,5,-4,25,6": "25",
+					 "1,2,3,4,5,6": "6",
+					 "-3,-5,-10,-1000000":"-3"
+		  }
+	},
+    "22": {
+            "description": "First input is a search term, second input is a list. Return 'true' if term occurs in list, else 'false'",
+            "sampleio":"dog\tcat,mouse,donky,dog -> true",
+            "tags": [
+                "trivial",
+                "search"
+            ],
+            "io": {
+                "1\t5,33,2,6,1,2":"true",
+                "1\t5,33,2,6,5,2":"false"
+            }
+        }
+
 }
