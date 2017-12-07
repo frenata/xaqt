@@ -327,5 +327,31 @@
                 "1,2,3,4,5|-2":"4,5,1,2,3"
             }
         },
+    "25": {
+            "description": "Take a number and return it's list of digits in ascending order",
+            "sampleIO":"3452 -> 2,3,4,5",
+            "tags": [
+                "easy",
+                "lists"
+            ],
+            "io": {
+                "1234":"1,2,3,4",
+                "9321":"1,2,3,9",
+                "23.43":"2,3,3,4"
+            }
+        },
+    "25": {
+            "description": "Take base ten input and return its binary",
+            "sampleIO":"25 -> 11001",
+            "tags": [
+                "medium",
+                "encoding"
+            ],
+            "io": {
+                "2433":"100110000001",
+                "0":"0",
+                "2":"10"
+            }
+        }
 
 }
