@@ -13,6 +13,7 @@ import (
 type TestResponse struct {
 	Id          id     `json:"id"`
 	Description string `json:"description"`
+	SampleIO    string `json:"sampleIO"`
 }
 
 type SubmissionRequest struct {
@@ -28,7 +29,7 @@ type SubmissionResponse struct {
 }
 
 type LanguagesResponse struct {
-	Languages []string `json:"languages"`
+	Languages map[string]testbox.Language `json:"languages"`
 }
 
 var box testbox.TestBox
@@ -60,7 +61,7 @@ func getTest(w http.ResponseWriter, r *http.Request) {
 	testid := testids[n]
 	test := challenges[testid]
 
-	tr := TestResponse{testid, test.Description}
+	tr := TestResponse{testid, test.Description, test.SampleIO}
 	json, _ := json.MarshalIndent(tr, "", "    ")
 
 	log.Printf("Handing out test %s:\n%s", testid, test.Description)
@@ -112,12 +113,13 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 
 func getLangs(w http.ResponseWriter, r *http.Request) {
 	log.Println("Received languages request")
-	langs := make([]string, 0)
+	langs := make(map[string]testbox.Language)
 
-	for k := range box.LanguageMap {
-		langs = append(langs, k)
+	for k, v := range box.LanguageMap {
+		langs[k] = testbox.Language{Boilerplate: v.Boilerplate, CommentPrefix: v.CommentPrefix}
 	}
 
+	// add boilerplate and comment info
 	log.Println(langs)
 	buf, _ := json.MarshalIndent(LanguagesResponse{langs}, "", "   ")
 

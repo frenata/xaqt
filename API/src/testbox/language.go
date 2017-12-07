@@ -7,4 +7,6 @@ type Language struct {
 	SourceFile         string `json:"sourceFile"`
 	OptionalExecutable string `json:"optionalExecutable"`
 	CompilerFlags      string `json:"compilerFlags"`
+	Boilerplate        string `json:"boilerplate"`
+	CommentPrefix      string `json:"commentPrefix"`
 }

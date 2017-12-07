@@ -1,15 +1,21 @@
 {
     "python": {
         "compiler": "python",
-        "sourceFile": "file.py"
+        "sourceFile": "file.py",
+        "boilerplate": "import sys\ninput = sys.stdin.read()\n",
+        "commentPrefix": "#"
     },
     "go" : {
         "compiler": "go run",
-        "sourceFile": "file.go"
+        "sourceFile": "file.go",
+        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\n')\n",
+        "commentPrefix": "\\\\"
     },
     "golang" : {
         "compiler": "go run",
-        "sourceFile": "file.go"
+        "sourceFile": "file.go",
+        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\n')\n",
+        "commentPrefix": "\\\\"
     },
     "nodejs": {
         "compiler": "nodejs",

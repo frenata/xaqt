@@ -6,6 +6,7 @@ type id string
 type Test struct {
 	Description string            `json:"description"`
 	Io          map[string]string `json:"io"`
+	SampleIO    string            `json:"sampleIO"`
 }
 
 func (t Test) StdIO() (string, string) {
