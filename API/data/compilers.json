@@ -8,7 +8,7 @@
     "golang" : {
         "compiler": "go run",
         "sourceFile": "file.go",
-        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\\n')\nvar args = strings.Split(input, \"|\")\n",
+        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n\t\"strings\"\n\t\"fmt\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\\n')\nvar args = strings.Split(input, \"|\")\n",
         "commentPrefix": "\/\/"
     },
     "ruby": {
