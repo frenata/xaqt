@@ -5,6 +5,7 @@
             "strings",
             "trivial"
         ],
+        "sampleIO":"howdy -> howdy",
         "io": {
             "not-test":"not-test",
             "test":"test"
@@ -16,6 +17,7 @@
             "strings",
             "trivial"
         ],
+        "sampleIO":"rotten -> nettor",
         "io": {
             "1": "1",
             "toggle": "elggot",
@@ -28,6 +30,7 @@
             "strings",
             "medium"
         ],
+        "sampleIO":"bob -> true",
         "io": {
             "bob": "true",
             "canal": "false",
@@ -38,7 +41,7 @@
     },
     "4": {
         "description": "Give two strings, calculate the hamming distance.",
-        "sampleio":"ACCAGGG|ACTATGG -> 2",
+        "sampleIO":"ACCAGGG|ACTATGG -> 2",
         "tags": [
             "strings",
             "medium"
@@ -56,6 +59,7 @@
             "strings",
             "medium"
         ],
+        "sampleIO":"foolish -> false",
         "io":{
             "isogram":"true",
             "eleven":"false",
@@ -66,7 +70,7 @@
     },
     "6": {
         "description": "Given N, return the difference between the square of the sum and the sum of the squares of the first N natural numbers",
-        "sampleio":"5 -> 170",
+        "sampleIO":"5 -> 170",
 		  "tags": [
             "math",
             "medium"
@@ -78,11 +82,12 @@
     },
     "7": {
         "description": "Return an acronym for the input",
-		  "sampleio" : "Ruby on Rails -> ROR",
+		  "sampleIO" : "Ruby on Rails -> ROR",
         "tags": [
             "strings",
             "medium"
         ],
+        "sampleIO": "Central Intelligence Agency -> CIA",
         "io": {
             "Portable Network Graphics":"PNG",
             "First In, First Out":"FIFO",
@@ -93,7 +98,7 @@
     },
     "8": {
         "description": "If input is a valid U.S. phone number (incl. area code), return just the digits. Otherwise return 'error'",
-        "sampleio" : "123.456.7890 -> 1234567890, 123456789 -> 'error'",
+        "sampleIO" : "123.456.7890 -> 1234567890, 123456789 -> 'error'",
 		  "tags": [
             "validation",
             "medium"
@@ -110,6 +115,7 @@
             "crypto",
             "hard"
         ],
+        "sampleIO": "low -> old",
         "io": {
             "no":"ml",
             "mindblowingly": "nrmwyoldrmtob",
@@ -122,6 +128,7 @@
             "chess",
             "hard"
         ],
+        "sampleIO": "a1|a2 -> true",
         "io": {
             "b4|b4": "false",
             "a8|b9": "false",
@@ -136,11 +143,12 @@
             "lists",
             "trivial"
         ],
+        "sampleIO": "1,b -> b",
         "io": {
-            "[1,2,3,4,5,6]":"6",
-            "[1]":"1",
-            "[\"foo\", \"bar\", \"baz\"]": "baz",
-            "['a','b']":"b"
+            "1,2,3,4,5,6":"6",
+            "1":"1",
+            "foo,bar,baz": "baz",
+            "a,b":"b"
         }
     },
     "12": {
@@ -149,10 +157,12 @@
             "lists",
             "trivial"
         ],
+        "sampleIO": "1,b -> 1",
         "io": {
-            "[1,2,3,4,5,6]":"5",
-            "[\"foo\", \"bar\", \"baz\"]": "bar",
-            "['a','b']":"a"
+            "1,2,3,4,5,6":"5",
+            "foo,bar,baz": "bar",
+            "a,b":"a",
+            "a":"error"
         }
     },
     "13": {
@@ -161,11 +171,12 @@
             "lists",
             "trivial"
         ],
+        "sampleIO": "1,2|2 -> 2",
         "io": {
-            "[1,2,3,4,5,6]|3":"3",
-            "[\"foo\", \"bar\", \"baz\"]|1": "foo",
-            "['a','b']|2":"b",
-            "[1]|1":"1"
+            "1,2,3,4,5,6|3":"3",
+            "foo,bar,baz|1": "foo",
+            "a,b|2":"b",
+            "1|1":"1"
         }
     },
     "14": {
@@ -174,6 +185,7 @@
             "lists",
             "medium"
         ],
+        "sampleIO": "[[1],[2]] -> [1,2]",
         "io": {
             "[1,[2,3]]":"[1,2,3]",
             "[1,2]":"[1,2]",
@@ -188,7 +200,9 @@
             "lists",
             "medium"
         ],
+        "sampleIO": "a22cc -> a2c",
         "io": {
+            "aa":"a",
             "1111":"1",
             "11223344":"1234",
             "111121111":"121"
@@ -200,6 +214,7 @@
             "lists",
             "medium"
         ],
+        "sampleIO": "aa22cc -> [aa,22,cc]",
         "io": {
             "1111":"[1111]",
             "11223344":"[11,22,33,44]",
@@ -212,11 +227,12 @@
             "lists",
             "hard"
         ],
+		"sampleIO": "ee -> 2e",
         "io": {
-            "1":"[(1,1)]",
-            "1111":"[(4,1)]",
-            "11223344":"[(2,1),(2,2),(2,3),(2,4)]",
-            "111121111":"[(4,1),(1,2),(4,1)]"
+            "a":"1a",
+            "aaaa":"4a",
+            "aabccd":"2a1b2c1d",
+            "aaaa2aaaa":"4a1b4a"
         }
     },
     "18": {
@@ -225,11 +241,12 @@
             "lists",
             "hard"
         ],
+		"sampleIO": "ee -> 2e",
         "io": {
-            "1":"[1]",
-            "1111":"[(4,1)]",
-            "112334":"[(2,1),2,(2,3),4]",
-            "111121111":"[(4,1),2,(4,1)]"
+            "a":"a",
+            "aaaa":"4a",
+            "aabccd":"2ab2cd",
+            "aaaa2aaaa":"4ab4a"
         }
     },
     "19": {
@@ -238,11 +255,12 @@
             "lists",
             "hard"
         ],
+		"sampleIO": "2e -> ee",
         "io": {
-            "[1]":"1",
-            "[(4,1)]":"1111",
-            "[(2,1),2,(2,3),4]":"112334",
-            "[(4,1),2,(4,1)]":"111121111"
+            "a":"a",
+            "4a":"aaaa",
+            "2ab2cd":"aabccd",
+            "4ab4a":"aaaabaaaa"
         }
     },
     "20": {
@@ -251,6 +269,7 @@
             "lists",
             "medium"
         ],
+		"sampleIO": "the -> thethe",
         "io": {
             "123":"112233",
             "abc":"aabbcc",
@@ -260,7 +279,7 @@
     },
 	 "21": {
 			"description":"Return the largest element in the input list",
-		  "sampleio": "1,4,5,2 -> 5",
+		  "sampleIO": "1,4,5,2 -> 5",
 		  "tags": [
 					 "lists",
 					 "trivial"
@@ -273,7 +292,7 @@
 	},
     "22": {
             "description": "First input is a search term, second input is a list. Return 'true' if term occurs in list, else 'false'",
-            "sampleio":"dog|cat,mouse,donky,dog -> true",
+            "sampleIO":"dog|cat,mouse,donky,dog -> true",
             "tags": [
                 "trivial",
                 "search"
