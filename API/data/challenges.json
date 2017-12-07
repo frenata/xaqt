@@ -367,7 +367,8 @@
             "99": "false",
             "97": "true",
             "100": "false"
-        },
+        }
+    },
     "27": {
         "description": "Find the greatest common divisor of two numbers.",
         "sampleIO": "8|16 -> 8",
@@ -379,7 +380,8 @@
             "36|63": "9",
             "47|89": "1",
             "165|80": "5"
-        },
+        }
+    },
     "28": {
         "description": "List all the prime factors of a number.",
         "sampleIO": "315 -> 3,3,5,7",
@@ -393,7 +395,8 @@
             "105": "3,5,7",
             "49": "7,7",
             "199": "199"
-        },
+        }
+    },
     "29": {
         "description": "XOR two hexademical numbers together",
         "sampleIO": "45|99 -> dc",
@@ -406,7 +409,8 @@
             "a5|5a" : "ff",
             "56|bb": "ed",
             "0|0": "0"
-        },
+        }
+    },
     "30": {
         "description": "bitwise AND two decimal numbers together",
         "sampleIO": "45|99 -> 33",
