@@ -250,12 +250,12 @@
         }
     },
     "19": {
-        "description": "decode a run length encoding list",
+        "description": "decode a run length encoding list, singletons are not tagged with a number",
         "tags": [
             "lists",
             "hard"
         ],
-		"sampleIO": "2e -> ee",
+		"sampleIO": "2e -> ee, abc -> abc",
         "io": {
             "a":"a",
             "4a":"aaaa",
@@ -269,7 +269,7 @@
             "lists",
             "medium"
         ],
-		"sampleIO": "the -> thethe",
+		"sampleIO": "the -> tthhee",
         "io": {
             "123":"112233",
             "abc":"aabbcc",
