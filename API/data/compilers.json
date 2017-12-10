@@ -53,5 +53,10 @@
         "compiler": "/bin/bash",
         "sourceFile": "file.sh",
         "commentPrefix": "#"
+    },
+    "haskell": {
+        "compiler": "stack exec -- runghc /usercode/file.hs",
+        "sourceFile": "file.hs",
+        "commentPrefix": "--"
     }
 }

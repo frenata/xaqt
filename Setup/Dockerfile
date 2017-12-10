@@ -46,16 +46,27 @@ RUN apt-get install -y gnustep-devel &&  sed -i 's/#define BASE_NATIVE_OBJC_EXCE
 
 
 RUN apt-get install -y scala
+RUN useradd -m mysql 
 RUN apt-get install -y mysql-server
 RUN apt-get install -y perl
 
 RUN apt-get install -y curl
-RUN mkdir -p /opt/rust && \
-    curl https://sh.rustup.rs -sSf | HOME=/opt/rust sh -s -- --no-modify-path -y && \
-    chmod -R 777 /opt/rust
+#RUN mkdir -p /opt/rust && \
+#    curl https://sh.rustup.rs -sSf | HOME=/opt/rust sh -s -- --no-modify-path -y && \
+#    chmod -R 777 /opt/rust
 
 RUN apt-get install -y sudo
 RUN apt-get install -y bc
 
 RUN echo "mysql ALL = NOPASSWD: /usr/sbin/service mysql start" | cat >> /etc/sudoers
 
+# install stack for haskell
+RUN curl -sSL https://get.haskellstack.org/ | sh
+USER mysql
+RUN stack setup
+RUN stack update
+WORKDIR /home/mysql
+RUN echo "main = putStrLn \"hello\"" > Test.hs
+RUN stack exec -- runghc Test.hs
+USER root
+WORKDIR /
