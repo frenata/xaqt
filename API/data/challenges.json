@@ -123,15 +123,15 @@
         }
     },
     "10": {
-        "description": "can these queens attack each other?",
+        "description": "can these queens attack each other? print 'error' on invalid position",
         "tags": [
             "chess",
             "hard"
         ],
         "sampleIO": "a1|a2 -> true",
         "io": {
-            "b4|b4": "false",
-            "a8|b9": "false",
+            "b4|b4": "error",
+            "a8|b9": "error",
             "b4|b7": "true",
             "a1|f6": "true",
             "b3|d7": "false"
