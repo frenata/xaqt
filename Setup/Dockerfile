@@ -13,7 +13,7 @@ RUN apt-get update
 #Install all the languages/compilers we are supporting.
 RUN apt-get install -y gcc
 RUN apt-get install -y g++
-RUN apt-get install -y php5-cli
+#RUN apt-get install -y php5-cli
 RUN apt-get install -y ruby
 RUN apt-get install -y python
 RUN apt-get install -y mono-xsp2 mono-xsp2-base
@@ -45,7 +45,7 @@ RUN apt-get install -y gobjc
 RUN apt-get install -y gnustep-devel &&  sed -i 's/#define BASE_NATIVE_OBJC_EXCEPTIONS     1/#define BASE_NATIVE_OBJC_EXCEPTIONS     0/g' /usr/include/GNUstep/GNUstepBase/GSConfig.h
 
 
-RUN apt-get install -y scala
+#RUN apt-get install -y scala
 RUN useradd -m mysql 
 RUN apt-get install -y mysql-server
 RUN apt-get install -y perl
@@ -61,12 +61,4 @@ RUN apt-get install -y bc
 RUN echo "mysql ALL = NOPASSWD: /usr/sbin/service mysql start" | cat >> /etc/sudoers
 
 # install stack for haskell
-RUN curl -sSL https://get.haskellstack.org/ | sh
-USER mysql
-RUN stack setup
-RUN stack update
-WORKDIR /home/mysql
-RUN echo "main = putStrLn \"hello\"" > Test.hs
-RUN stack exec -- runghc Test.hs
-USER root
-WORKDIR /
+RUN apt-get install -y haskell-platform

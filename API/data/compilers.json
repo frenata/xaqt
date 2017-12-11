@@ -55,8 +55,9 @@
         "commentPrefix": "#"
     },
     "haskell": {
-        "compiler": "stack exec -- runghc /usercode/file.hs",
+        "compiler": "ghc -o /usercode/a.out",
         "sourceFile": "file.hs",
+        "optionalExecutable": "/usercode/a.out",
         "commentPrefix": "--"
     }
 }

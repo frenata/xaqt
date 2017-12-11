@@ -53,7 +53,7 @@ if [ "$runner" = "" ]; then
 #Branch 2
 else  # runner was not blank
 	#In case of compile errors, redirect them to a file
-        $compiler /usercode/$file $addtionalArg #&> /usercode/errors.txt
+        $compiler /usercode/$file $addtionalArg > /dev/null #&> /usercode/errors.txt
 	#Branch 2a : exit code is zero aka success
 	if [ $? -eq 0 ];	then
         while read p; do
