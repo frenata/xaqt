@@ -102,6 +102,7 @@ func (s *Sandbox) execute() (string, error) {
 		//log.Printf("Docker returns: %v", res)
 		errorBytes, err := ioutil.ReadFile(s.options.folder + "/errors")
 		bytes, err := ioutil.ReadFile(s.options.folder + "/completed")
+		log.Printf("Completed File: \n%s", string(bytes))
 		// TODO: handle file io errors
 		if len(errorBytes) > 0 {
 			bytes, err = errorBytes, fmt.Errorf("compile error: %s", errorBytes)

@@ -269,7 +269,7 @@
             "lists",
             "medium"
         ],
-		"sampleIO": "the -> thethe",
+		"sampleIO": "the -> tthhee",
         "io": {
             "123":"112233",
             "abc":"aabbcc",
