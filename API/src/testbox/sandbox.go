@@ -32,7 +32,7 @@ func DefaultSandboxOptions() SandboxOptions {
 		tmp = "/tmp"
 	}
 
-	return SandboxOptions{tmp, pwd, "virtual_machine", time.Second * 20}
+	return SandboxOptions{tmp, pwd, "virtual_machine", time.Second * 5}
 }
 
 func NewSandbox(l Language, code, stdin string, options SandboxOptions) *Sandbox {
