@@ -9,6 +9,9 @@ import (
 	"strings"
 )
 
+const InputSeperator = "*-EOI-*"
+const OutputSeperator = "*-EOO-*"
+
 type TestBox struct {
 	LanguageMap map[string]Language
 }
@@ -76,13 +79,13 @@ func (t TestBox) Test(language, code, input, expected string) (map[string]string
 	}
 	result, msg := t.run(language, code, input)
 
-	return compareLineByLine(input, expected, result), msg
+	return compareBlockByBlock(input, expected, result), msg
 }
 
-func compareLineByLine(input, exp, res string) map[string]string {
-	inpSlice := strings.Split(input, "\n")
-	expSlice := strings.Split(exp, "\n")
-	resSlice := strings.Split(res, "\n")
+func compareBlockByBlock(input, exp, res string) map[string]string {
+	inpSlice := strings.Split(input, InputSeperator)
+	expSlice := strings.Split(exp, InputSeperator)
+	resSlice := strings.Split(res, OutputSeperator)
 
 	results := make(map[string]string)
 
@@ -126,6 +129,54 @@ func compareLineByLine(input, exp, res string) map[string]string {
 
 	return results
 }
+
+// func compareLineByLine(input, exp, res string) map[string]string {
+// 	inpSlice := strings.Split(input, "\n")
+// 	expSlice := strings.Split(exp, "\n")
+// 	resSlice := strings.Split(res, "\n")
+
+// 	results := make(map[string]string)
+
+// 	// TODO: remove for prod!
+// 	if strings.HasPrefix(resSlice[0], "godmode ") {
+// 		nStr := strings.TrimPrefix(resSlice[0], "godmode ")
+// 		n, e := strconv.Atoi(nStr)
+// 		if e != nil {
+// 			log.Println(e)
+// 			panic("Bad dog!")
+// 		}
+// 		if n > len(inpSlice) {
+// 			n = len(inpSlice)
+// 		}
+
+// 		i := 0
+// 		log.Println(i, n)
+// 		for ; i < n; i++ {
+// 			results[inpSlice[i]] = "true"
+// 		}
+// 		for ; i < len(inpSlice)-1; i++ {
+// 			results[inpSlice[i]] = "false"
+// 		}
+
+// 		return results
+// 	}
+
+// 	// TODO deal with partial success but incorrect result couont
+// 	/*if len(expSlice) != len(resSlice) {
+// 		return results
+// 	}*/
+
+// 	for i := 0; i < len(inpSlice)-1; i++ {
+// 		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
+// 		if i > len(expSlice)-1 || i > len(resSlice)-1 {
+// 			results[inpSlice[i]] = "false"
+// 		} else {
+// 			results[inpSlice[i]] = fmt.Sprintf("%v", expSlice[i] == resSlice[i])
+// 		}
+// 	}
+
+// 	return results
+// }
 
 func mapInToOut(input, res string) map[string]string {
 	inpSlice := strings.Split(input, "\n")

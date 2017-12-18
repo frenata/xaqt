@@ -1,8 +1,9 @@
 package main
 
 import "strings"
+import "testbox"
 
-type id string
+type id = string
 type Test struct {
 	Description string            `json:"description"`
 	Io          map[string]string `json:"io"`
@@ -24,5 +25,5 @@ func (t Test) StdIO() (string, string) {
 }
 
 func join(s []string) string {
-	return strings.Join(s, "\n") + "\n"
+	return strings.Join(s, testbox.InputSeperator) + "\n"
 }

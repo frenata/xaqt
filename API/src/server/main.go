@@ -4,11 +4,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
 	"testbox"
-	"time"
 )
 
 type TestResponse struct {
@@ -51,16 +49,13 @@ func main() {
 
 func getTest(w http.ResponseWriter, r *http.Request) {
 	log.Println("Received request for test...")
-	testids := make([]id, len(challenges))
-	i := 0
-	for k := range challenges {
-		testids[i] = k
-		i++
-	}
 
-	rand.Seed(time.Now().UTC().UnixNano())
-	n := rand.Intn(len(testids))
-	testid := testids[n]
+	// rand.Seed(time.Now().UTC().UnixNano())
+	// n := rand.Intn(len(testids))
+
+	// temporary hack to check multi-line:
+	testid := "1"
+	// testid := testids[n]
 	test := challenges[testid]
 
 	tr := TestResponse{testid, test.Description, test.SampleIO}

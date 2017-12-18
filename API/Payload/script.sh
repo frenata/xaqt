@@ -43,12 +43,32 @@ exec  2> $"/usercode/errors"
 #3>&1 4>&2 >
 
 START=$(date +%s.%2N)
+NL=$'\n'
+FIRST_LINE="TRUE"
+IN_SEP="EOI"
+OUT_SEP="*-EOO-*"
 #Branch 1
 if [ "$runner" = "" ]; then
-    # treat each line of inputFile as a separate STDIN
-    while read p; do 
-        echo -n $p | $compiler /usercode/$file
-    done < $"/usercode/inputFile"
+    # while read p; do 
+    #     echo -n $p | $compiler /usercode/$file
+    # done < $"/usercode/inputFile"
+    # Reads until reaching $SEP and then runs command with that
+    # block of input
+	while read p; do
+		if [ "$p" = "$IN_SEP" ]; then
+			echo -n $INPUT | $compiler /usercode/$file
+			echo "$OUT_SEP"
+			INPUT=""
+			FIRST_LINE="TRUE"
+		else
+			if [ "$FIRST_LINE" = "FALSE" ];then
+				INPUT="$INPUT$NL"
+				# echo "Adding \n"
+			fi
+			INPUT="$INPUT$p"
+			FIRST_LINE="FALSE"
+		fi
+	done < $"/usercode/inputFile"
 
 #Branch 2
 else  # runner was not blank
@@ -56,9 +76,21 @@ else  # runner was not blank
         $compiler /usercode/$file $addtionalArg > /dev/null #&> /usercode/errors.txt
 	#Branch 2a : exit code is zero aka success
 	if [ $? -eq 0 ];	then
-        while read p; do
-            echo -n $p | $runner 
-        done < $"/usercode/inputFile"
+			while read p; do
+				if [ "$p" = "$IN_SEP" ]; then
+					echo -n $INPUT | $compiler /usercode/$file
+					echo "$OUT_SEP"
+					INPUT=""
+					FIRST_LINE="TRUE"
+				else
+					if [ "$FIRST_LINE" = "FALSE" ];then
+						INPUT="$INPUT$NL"
+						# echo "Adding \n"
+					fi
+					INPUT="$INPUT$p"
+					FIRST_LINE="FALSE"
+				fi
+			done < $"/usercode/inputFile"
 
 	#Branch 2b : exit code is not zero
 	else
