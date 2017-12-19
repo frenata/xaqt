@@ -9,8 +9,7 @@ import (
 	"strings"
 )
 
-const InputSeperator = "\n*-EOI-*\n"
-const OutputSeperator = "\n*-EOO-*\n"
+const Seperator = "\n*-BRK-*\n"
 
 type TestBox struct {
 	LanguageMap map[string]Language
@@ -84,9 +83,9 @@ func (t TestBox) Test(language, code, input, expected string) (map[string]string
 }
 
 func compareBlockByBlock(input, exp, res string) map[string]string {
-	inpSlice := strings.Split(input, InputSeperator)
-	expSlice := strings.Split(exp, OutputSeperator)
-	resSlice := strings.Split(res, OutputSeperator)
+	inpSlice := strings.Split(input, Seperator)
+	expSlice := strings.Split(exp, Seperator)
+	resSlice := strings.Split(res, Seperator)
 
 	results := make(map[string]string)
 

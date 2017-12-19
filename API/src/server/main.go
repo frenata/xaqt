@@ -77,7 +77,7 @@ func getStdout(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	output, msg := box.StdOut(submission.Language, submission.Code, submission.Input)
+	output, msg := box.StdOut(submission.Language, submission.Code, submission.Input+testbox.Seperator)
 	log.Println(output, msg)
 
 	buf, _ := json.MarshalIndent(SubmissionResponse{output, msg}, "", "   ")
