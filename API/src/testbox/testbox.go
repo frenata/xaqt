@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-const InputSeperator = "*-EOI-*"
-const OutputSeperator = "*-EOO-*"
+const InputSeperator = "\n*-EOI-*\n"
+const OutputSeperator = "\n*-EOO-*\n"
 
 type TestBox struct {
 	LanguageMap map[string]Language
@@ -40,6 +40,7 @@ func New(languagesFile string) TestBox {
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
 func (t TestBox) run(language, code, input string) (string, Message) {
+	log.Printf("TestBox run called with input: %v", input)
 	lang, ok := t.LanguageMap[strings.ToLower(language)]
 	if !ok {
 		return "", Message{"error", "testBox", "language not recognized"}
@@ -65,18 +66,18 @@ func (t TestBox) run(language, code, input string) (string, Message) {
 }
 
 func (t TestBox) StdOut(language, code, input string) (map[string]string, Message) {
-	if !strings.HasSuffix(input, "\n") {
-		input = input + "\n"
-	}
+	// if !strings.HasSuffix(input, "\n") {
+	// 	input = input + "\n"
+	// }
 	result, msg := t.run(language, code, input)
 
 	return mapInToOut(input, result), msg
 }
 
 func (t TestBox) Test(language, code, input, expected string) (map[string]string, Message) {
-	if !strings.HasSuffix(input, "\n") {
-		input = input + "\n"
-	}
+	// if !strings.HasSuffix(input, "\n") {
+	// 	input = input + "\n"
+	// }
 	result, msg := t.run(language, code, input)
 
 	return compareBlockByBlock(input, expected, result), msg
@@ -84,7 +85,7 @@ func (t TestBox) Test(language, code, input, expected string) (map[string]string
 
 func compareBlockByBlock(input, exp, res string) map[string]string {
 	inpSlice := strings.Split(input, InputSeperator)
-	expSlice := strings.Split(exp, InputSeperator)
+	expSlice := strings.Split(exp, OutputSeperator)
 	resSlice := strings.Split(res, OutputSeperator)
 
 	results := make(map[string]string)
@@ -119,10 +120,11 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 	}*/
 
 	for i := 0; i < len(inpSlice)-1; i++ {
-		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
+
 		if i > len(expSlice)-1 || i > len(resSlice)-1 {
 			results[inpSlice[i]] = "false"
 		} else {
+			log.Printf("Input:\n%v\nOutput:\n%v\nResult:\n%v\n", inpSlice[i], expSlice[i], resSlice[i])
 			results[inpSlice[i]] = fmt.Sprintf("%v", expSlice[i] == resSlice[i])
 		}
 	}

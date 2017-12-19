@@ -45,7 +45,7 @@ exec  2> $"/usercode/errors"
 START=$(date +%s.%2N)
 NL=$'\n'
 FIRST_LINE="TRUE"
-IN_SEP="EOI"
+IN_SEP="*-EOI-*"
 OUT_SEP="*-EOO-*"
 #Branch 1
 if [ "$runner" = "" ]; then
@@ -56,7 +56,7 @@ if [ "$runner" = "" ]; then
     # block of input
 	while read p; do
 		if [ "$p" = "$IN_SEP" ]; then
-			echo -n $INPUT | $compiler /usercode/$file
+			echo -n "$INPUT" | $compiler /usercode/$file
 			echo "$OUT_SEP"
 			INPUT=""
 			FIRST_LINE="TRUE"

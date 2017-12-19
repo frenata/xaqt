@@ -21,9 +21,9 @@ func (t Test) StdIO() (string, string) {
 		i++
 	}
 
-	return join(inputs), join(outputs)
+	return joinAndAppend(inputs, testbox.InputSeperator), joinAndAppend(outputs, testbox.OutputSeperator)
 }
 
-func join(s []string) string {
-	return strings.Join(s, testbox.InputSeperator) + "\n"
+func joinAndAppend(sl []string, endChar string) string {
+	return strings.Join(sl, endChar) + endChar
 }

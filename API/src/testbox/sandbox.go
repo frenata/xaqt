@@ -73,6 +73,7 @@ func (s *Sandbox) prepare() {
 	//fmt.Println(ioutil.ReadFile(tmpFolder + "/" + s.language.SourceFile))
 
 	// write a file for stdin
+	log.Printf("writing inputfile: %v", s.stdin)
 	err = ioutil.WriteFile(tmpFolder+"/inputFile", []byte(s.stdin), 0777)
 	if err != nil {
 		log.Fatal(err)
