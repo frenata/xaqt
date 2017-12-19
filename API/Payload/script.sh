@@ -45,8 +45,8 @@ exec  2> $"/usercode/errors"
 START=$(date +%s.%2N)
 NL=$'\n'
 FIRST_LINE="TRUE"
-IN_SEP="*-EOI-*"
-OUT_SEP="*-EOO-*"
+IN_SEP="*-BRK-*"
+OUT_SEP="*-BRK-*"
 #Branch 1
 if [ "$runner" = "" ]; then
     # while read p; do 

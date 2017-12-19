@@ -64,19 +64,19 @@ func (t TestBox) run(language, code, input string) (string, Message) {
 	return result, Message{"success", "testBox", "compilation took " + timeTaken + " seconds"}
 }
 
-func (t TestBox) StdOut(language, code, input string) (map[string]string, Message) {
-	// if !strings.HasSuffix(input, "\n") {
-	// 	input = input + "\n"
-	// }
+func (t TestBox) CompileAndPrint(language, code, input string) (map[string]string, Message) {
+	input = input + Seperator
 	result, msg := t.run(language, code, input)
 
+	log.Printf("CompileAndPrint input: %v", input)
+
+	input = strings.Split(input, Seperator)[0]
+	result = strings.Split(result, Seperator)[0]
 	return mapInToOut(input, result), msg
 }
 
-func (t TestBox) Test(language, code, input, expected string) (map[string]string, Message) {
-	// if !strings.HasSuffix(input, "\n") {
-	// 	input = input + "\n"
-	// }
+func (t TestBox) CompileAndChallenge(language, code, input, expected string) (map[string]string, Message) {
+
 	result, msg := t.run(language, code, input)
 
 	return compareBlockByBlock(input, expected, result), msg
@@ -131,6 +131,38 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 	return results
 }
 
+func mapInToOut(input, res string) map[string]string {
+	inpSlice := strings.Split(input, Seperator)
+	resSlice := strings.Split(res, Seperator)
+
+	results := make(map[string]string, len(inpSlice))
+
+	// TODO deal with partial success but incorrect result count
+
+	log.Printf("Input: %v\nSliced: %v\nRes:%v\nSliced:%v\nlen(inpSlice):%v", input, inpSlice, res, resSlice, len(inpSlice))
+
+	for i := range inpSlice {
+		if resSlice[i] == "" {
+			resSlice[i] = "NO OUTPUT"
+		}
+		if inpSlice[i] == "" {
+			inpSlice[i] = "NO INPUT"
+		}
+		results[inpSlice[i]] = resSlice[i]
+	}
+
+	// for i := 0; i < len(inpSlice)-1; i++ {
+	// 	//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
+	// 	if i > len(resSlice)-2 {
+	// 		results[inpSlice[i]] = "NO OUTPUT"
+	// 	} else {
+	// 		results[inpSlice[i]] = resSlice[i]
+	// 	}
+	// }
+
+	return results
+}
+
 // func compareLineByLine(input, exp, res string) map[string]string {
 // 	inpSlice := strings.Split(input, "\n")
 // 	expSlice := strings.Split(exp, "\n")
@@ -178,23 +210,3 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 
 // 	return results
 // }
-
-func mapInToOut(input, res string) map[string]string {
-	inpSlice := strings.Split(input, "\n")
-	resSlice := strings.Split(res, "\n")
-
-	results := make(map[string]string, len(inpSlice))
-
-	// TODO deal with partial success but incorrect result couont
-
-	for i := 0; i < len(inpSlice)-1; i++ {
-		//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
-		if i > len(resSlice)-2 {
-			results[inpSlice[i]] = "NO OUTPUT"
-		} else {
-			results[inpSlice[i]] = resSlice[i]
-		}
-	}
-
-	return results
-}

@@ -77,7 +77,7 @@ func getStdout(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	output, msg := box.StdOut(submission.Language, submission.Code, submission.Input+testbox.Seperator)
+	output, msg := box.CompileAndPrint(submission.Language, submission.Code, submission.Input)
 	log.Println(output, msg)
 
 	buf, _ := json.MarshalIndent(SubmissionResponse{output, msg}, "", "   ")
@@ -99,7 +99,7 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 	test := challenges[submission.Id]
 	stdin, stdout := test.StdIO()
 
-	passed, msg := box.Test(submission.Language, submission.Code, stdin, stdout)
+	passed, msg := box.CompileAndChallenge(submission.Language, submission.Code, stdin, stdout)
 	log.Println(passed, msg)
 
 	buf, _ := json.MarshalIndent(SubmissionResponse{passed, msg}, "", "   ")

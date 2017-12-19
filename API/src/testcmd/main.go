@@ -36,8 +36,8 @@ func main() {
 	expected := "Hello\n"
 
 	for lang, code := range compilerTests {
-		out, msg := box.Test(lang, code, stdin, expected)
-		oOut, oMsg := box.StdOut(lang, code, "test")
+		out, msg := box.CompileAndChallenge(lang, code, stdin, expected)
+		oOut, oMsg := box.CompileAndPrint(lang, code, "test")
 		log.Println(out, msg)
 		log.Println(oOut, oMsg)
 		if out[""] == "true" {
