@@ -1,16 +1,29 @@
 {
     "1": {
-        "description": "echo stdin",
+        "title": "Echo",
+        "description": "Echo stdin.",
         "tags": [
             "strings",
             "trivial"
         ],
         "sampleIO":"howdy -> howdy",
-        "io": {
-            "multi\nline\ntest":"multi\nline\ntest",
-            "not-test":"not-test",
-            "test":"test"
-        }
+        "io": [
+            "case": {
+                "input":  "not-test",
+                "output": "not-test",
+                "desc": ""
+            },
+            "case": {
+                "input":  "test",
+                "output": "test",
+                "desc": ""
+            },
+            "case": {
+                "input":  "multi\nline\ntest",
+                "output": "multi\nline\ntest",
+                "desc": "multiline echo"
+            }
+        ]
     },
     "2": {
         "description": "Return the reverse of input string",
