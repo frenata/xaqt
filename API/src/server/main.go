@@ -10,11 +10,11 @@ import (
 )
 
 type TestResponse struct {
-	Id          id       `json:"id"`
-	Description string   `json:"description"`
-	SampleIO    string   `json:"sampleIO"`
-	ShortName   string   `json:"shortName"`
-	Tags        []string `json:"tags"`
+	Id          id     `json:"id"`
+	Description string `json:"description"`
+	SampleIO    string `json:"sampleIO"`
+	// ShortName   string   `json:"shortName"`
+	// Tags        []string `json:"tags"`
 }
 
 type SubmissionRequest struct {
