@@ -7,7 +7,23 @@
             "trivial"
         ],
         "sampleIO":"howdy -> howdy",
-        "io": {"a":"a"}
+        "io": [
+            {
+                "input":  "not-test",
+                "output": "not-test",
+                "desc": ""
+            },
+            {
+                "input":  "test",
+                "output": "test",
+                "desc": ""
+            },
+            {
+                "input":  "multi\nline\ntest",
+                "output": "multi\nline\ntest",
+                "desc": "multiline echo"
+            }
+        ]
     },
     "2": {
         "description": "Return the reverse of input string",
