@@ -103,6 +103,7 @@ func (s *Sandbox) execute() (string, error) {
 		//log.Printf("Docker returns: %v", res)
 		errorBytes, err := ioutil.ReadFile(s.options.folder + "/errors")
 		bytes, err := ioutil.ReadFile(s.options.folder + "/completed")
+
 		log.Printf("Completed File: \n%s", string(bytes))
 		// TODO: handle file io errors
 		if len(errorBytes) > 0 {
@@ -110,7 +111,10 @@ func (s *Sandbox) execute() (string, error) {
 		}
 
 		return string(bytes), err
-	case <-time.After(time.Second * s.options.timeout):
+	case <-time.After(s.options.timeout):
+		// case <-time.After(time.Second * 1):
+		// log.Println(s.options.timeout)
+		// timeout is never getting called.... TODO
 		log.Println("timed out")
 		return "", fmt.Errorf("Timed out")
 	}
