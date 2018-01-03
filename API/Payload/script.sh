@@ -56,7 +56,18 @@ if [ "$runner" = "" ]; then
     # block of input
 	while read p; do
 		if [ "$p" = "$IN_SEP" ]; then
-			echo -n "$INPUT" | $compiler /usercode/$file
+			
+			# run program with input
+			OUTPUT="$(echo -n "$INPUT" | $compiler /usercode/$file)"
+
+			if [ ${#OUTPUT} = 0 ]; then 
+				# if no input is produced, make a newline (makes later parsing possible)
+				echo
+			else
+				# otherwise just echo the output
+				echo "$OUTPUT"
+			fi
+
 			echo "$OUT_SEP"
 			INPUT=""
 			FIRST_LINE="TRUE"
@@ -73,12 +84,23 @@ if [ "$runner" = "" ]; then
 #Branch 2
 else  # runner was not blank
 	#In case of compile errors, redirect them to a file
-        $compiler /usercode/$file $addtionalArg > /dev/null #&> /usercode/errors.txt
+    $compiler /usercode/$file $addtionalArg > /dev/null #&> /usercode/errors.txt
 	#Branch 2a : exit code is zero aka success
 	if [ $? -eq 0 ];	then
 			while read p; do
 				if [ "$p" = "$IN_SEP" ]; then
-					echo -n $INPUT | $compiler /usercode/$file
+					
+					# run program with input
+					OUTPUT="$(echo -n "$INPUT" | $compiler /usercode/$file)"
+
+					if [ ${#OUTPUT} = 0 ]; then 
+						# if no input is produced, make a newline (makes later parsing possible)
+						echo
+					else
+						# otherwise just echo the output
+						echo "$OUTPUT"
+					fi
+
 					echo "$OUT_SEP"
 					INPUT=""
 					FIRST_LINE="TRUE"

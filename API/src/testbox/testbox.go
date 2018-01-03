@@ -67,7 +67,7 @@ func (t TestBox) CompileAndPrint(language, code, input string) (map[string]strin
 	input = input + Seperator
 	result, msg := t.run(language, code, input)
 
-	log.Printf("CompileAndPrint input: %v", input)
+	// log.Printf("CompileAndPrint input: %v", input)
 
 	input = strings.Split(input, Seperator)[0]
 	result = strings.Split(result, Seperator)[0]
@@ -87,13 +87,13 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 	resSlice := strings.Split(res, Seperator)
 
 	results := make(map[string]string)
-	log.Printf("compBbyb, input: %v", input)
-	log.Printf("compBbyb, exp: %v", exp)
-	log.Printf("compBbyb, res: %v", res)
+	// log.Printf("compBbyb, input: %v", input)
+	// log.Printf("compBbyb, exp: %v", exp)
+	// log.Printf("compBbyb, res: %v", res)
 
-	log.Printf("compBbyb, inpSlice: %v", inpSlice)
-	log.Printf("compBbyb, expSlice: %v", expSlice)
-	log.Printf("compBbyb, resSlice: %v", resSlice)
+	// log.Printf("compBbyb, inpSlice: %v", inpSlice)
+	// log.Printf("compBbyb, expSlice: %v", expSlice)
+	// log.Printf("compBbyb, resSlice: %v", resSlice)
 
 	// TODO deal with partial success but incorrect result couont
 	/*if len(expSlice) != len(resSlice) {
@@ -121,9 +121,12 @@ func mapInToOut(input, res string) map[string]string {
 
 	// TODO deal with partial success but incorrect result count
 
-	log.Printf("Input: %v\nSliced: %v\nRes:%v\nSliced:%v\nlen(inpSlice):%v", input, inpSlice, res, resSlice, len(inpSlice))
+	// log.Printf("Input: %v\nSliced: %v\nRes:%v\nSliced:%v\nlen(inpSlice):%v", input, inpSlice, res, resSlice, len(inpSlice))
 
 	for i := range inpSlice {
+		// log.Printf("resSlice: %s\n", resSlice[i])
+		// log.Printf("resSlice trimmed: %s\n", strings.TrimSpace(resSlice[i]))
+		// log.Printf("Seperator: %s\n", Seperator)
 		if resSlice[i] == "" {
 			resSlice[i] = "NO OUTPUT"
 		}
@@ -132,15 +135,6 @@ func mapInToOut(input, res string) map[string]string {
 		}
 		results[inpSlice[i]] = resSlice[i]
 	}
-
-	// for i := 0; i < len(inpSlice)-1; i++ {
-	// 	//log.Println("compare: ", inpSlice[i], expSlice[i], resSlice[i])
-	// 	if i > len(resSlice)-2 {
-	// 		results[inpSlice[i]] = "NO OUTPUT"
-	// 	} else {
-	// 		results[inpSlice[i]] = resSlice[i]
-	// 	}
-	// }
 
 	return results
 }
