@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"strconv"
 	"strings"
 )
 
@@ -95,30 +94,6 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 	log.Printf("compBbyb, inpSlice: %v", inpSlice)
 	log.Printf("compBbyb, expSlice: %v", expSlice)
 	log.Printf("compBbyb, resSlice: %v", resSlice)
-
-	// TODO: remove for prod!
-	if strings.HasPrefix(resSlice[0], "godmode ") {
-		nStr := strings.TrimPrefix(resSlice[0], "godmode ")
-		n, e := strconv.Atoi(nStr)
-		if e != nil {
-			log.Println(e)
-			panic("Bad dog!")
-		}
-		if n > len(inpSlice) {
-			n = len(inpSlice)
-		}
-
-		i := 0
-		log.Println(i, n)
-		for ; i < n; i++ {
-			results[inpSlice[i]] = "true"
-		}
-		for ; i < len(inpSlice)-1; i++ {
-			results[inpSlice[i]] = "false"
-		}
-
-		return results
-	}
 
 	// TODO deal with partial success but incorrect result couont
 	/*if len(expSlice) != len(resSlice) {
