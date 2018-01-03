@@ -1,5 +1,6 @@
 {
     "1": {
+		"id": "1",
         "title": "Echo",
         "description": "Echo stdin.",
         "tags": [
@@ -7,9 +8,15 @@
             "trivial"
         ],
         "sampleIO":"howdy -> howdy",
-        "io": {"a":"a"}
+        "io": {
+            "a\nb\nc":"a\nb\nc",
+            "dodo":"dodo",
+            "12321":"12321",
+            "!@ ,.":"!@ ,."
+        }
     },
     "2": {
+		"id": "2",
         "description": "Return the reverse of input string",
         "tags": [
             "strings",
@@ -23,6 +30,7 @@
         }
     },
     "3": {
+		"id": "3",
         "description": "If input is a palindrome, return 'true', else 'false'",
         "tags": [
             "strings",
@@ -38,6 +46,7 @@
         }
     },
     "4": {
+		"id": "4",
         "description": "Give two strings, calculate the hamming distance.",
         "sampleIO":"ACCAGGG|ACTATGG -> 2",
         "tags": [
@@ -52,6 +61,7 @@
         }
     },
     "5": {
+		"id": "5",
         "description": "If input is an isogram, return 'true', else 'false'",
         "tags": [
             "strings",
@@ -67,6 +77,7 @@
         }
     },
     "6": {
+		"id": "6",
         "description": "Given N, return the difference between the square of the sum and the sum of the squares of the first N natural numbers",
         "sampleIO":"5 -> 170",
 		  "tags": [
@@ -79,6 +90,7 @@
         }
     },
     "7": {
+		"id": "7",
         "description": "Return an acronym for the input",
 		  "sampleIO" : "Ruby on Rails -> ROR",
         "tags": [
@@ -95,6 +107,7 @@
         }
     },
     "8": {
+		"id": "8",
         "description": "If input is a valid U.S. phone number (incl. area code), return just the digits. Otherwise return 'error'",
         "sampleIO" : "123.456.7890 -> 1234567890, 123456789 -> 'error'",
 		  "tags": [
@@ -108,6 +121,7 @@
         }
     },
     "9": {
+		"id": "9",
         "description": "Return input encrypted using an atbash cipher",
         "tags": [
             "crypto",

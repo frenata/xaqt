@@ -88,6 +88,13 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 	resSlice := strings.Split(res, Seperator)
 
 	results := make(map[string]string)
+	log.Printf("compBbyb, input: %v", input)
+	log.Printf("compBbyb, exp: %v", exp)
+	log.Printf("compBbyb, res: %v", res)
+
+	log.Printf("compBbyb, inpSlice: %v", inpSlice)
+	log.Printf("compBbyb, expSlice: %v", expSlice)
+	log.Printf("compBbyb, resSlice: %v", resSlice)
 
 	// TODO: remove for prod!
 	if strings.HasPrefix(resSlice[0], "godmode ") {

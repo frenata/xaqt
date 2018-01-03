@@ -1,7 +1,10 @@
 package main
 
-import "strings"
-import "testbox"
+import (
+	"log"
+	"strings"
+	"testbox"
+)
 
 type id = string
 type Challenge struct {
@@ -11,12 +14,13 @@ type Challenge struct {
 	SampleIO    string            `json:"sampleIO"`
 }
 
-func (t Challenge) StdIO() (string, string) {
-	inputs := make([]string, len(t.IO))
-	outputs := make([]string, len(t.IO))
+func (c *Challenge) getCases() (string, string) {
+	inputs := make([]string, len(c.IO))
+	outputs := make([]string, len(c.IO))
 
+	log.Printf("getCases, challenge: %v\n", c)
 	i := 0
-	for k, v := range t.IO {
+	for k, v := range c.IO {
 		inputs[i] = k
 		outputs[i] = v
 		i++

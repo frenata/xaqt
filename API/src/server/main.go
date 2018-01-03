@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -22,6 +23,10 @@ type SubmissionRequest struct {
 	Language string `json:"language"`
 	Code     string `json:"code"`
 	Input    string `json:"input"`
+}
+
+func (s SubmissionRequest) String() string {
+	return fmt.Sprintf("( <SubmissionRequest> {ID: %s, Language: %s, Code: Hidden, Input: %s} )", s.Id, s.Language, s.Input)
 }
 
 type SubmissionResponse struct {
@@ -58,11 +63,11 @@ func getChallenge(w http.ResponseWriter, r *http.Request) {
 	// temporary hack to check multi-line:
 	challengeID := "1"
 	// testid := testids[n]
-	chal := challenges[challengeID]
+	challenge := challenges[challengeID]
 
-	json, _ := json.MarshalIndent(chal, "", "    ")
+	json, _ := json.MarshalIndent(challenge, "", "    ")
 
-	log.Printf("Handing out test %s:\n%s", challengeID, chal.Description)
+	log.Printf("Handing out test ID: %s, Desc:%s\n", challenge.ID, challenge.Description)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(json)
@@ -96,9 +101,11 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	defer r.Body.Close()
+	log.Printf("submitTest, submission: %s\n", submission)
 
-	test := challenges[submission.Id]
-	stdin, stdout := test.StdIO()
+	challenge := challenges[submission.Id]
+	stdin, stdout := challenge.getCases()
+	log.Printf("submitTest, challenge: %v\n", challenge)
 
 	passed, msg := box.CompileAndChallenge(submission.Language, submission.Code, stdin, stdout)
 	log.Println(passed, msg)
