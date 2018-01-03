@@ -112,9 +112,6 @@ func (s *Sandbox) execute() (string, error) {
 
 		return string(bytes), err
 	case <-time.After(s.options.timeout):
-		// case <-time.After(time.Second * 1):
-		// log.Println(s.options.timeout)
-		// timeout is never getting called.... TODO
 		log.Println("timed out")
 		return "", fmt.Errorf("Timed out")
 	}

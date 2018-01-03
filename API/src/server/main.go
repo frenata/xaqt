@@ -126,7 +126,7 @@ func getLangs(w http.ResponseWriter, r *http.Request) {
 	w.Write(buf)
 }
 
-var challenges map[id]Test
+var challenges map[id]Challenge
 
 func init() {
 	log.Println("Reading challenges file...")
@@ -135,7 +135,7 @@ func init() {
 		panic(err)
 	}
 
-	challenges = make(map[id]Test)
+	challenges = make(map[id]Challenge)
 	err = json.Unmarshal(bytes, &challenges)
 	if err != nil {
 		panic(err)
