@@ -5,17 +5,18 @@ import "testbox"
 
 type id = string
 type Challenge struct {
+	ID          string            `json:"id"`
 	Description string            `json:"description"`
-	Io          map[string]string `json:"io"`
+	IO          map[string]string `json:"io"`
 	SampleIO    string            `json:"sampleIO"`
 }
 
 func (t Challenge) StdIO() (string, string) {
-	inputs := make([]string, len(t.Io))
-	outputs := make([]string, len(t.Io))
+	inputs := make([]string, len(t.IO))
+	outputs := make([]string, len(t.IO))
 
 	i := 0
-	for k, v := range t.Io {
+	for k, v := range t.IO {
 		inputs[i] = k
 		outputs[i] = v
 		i++

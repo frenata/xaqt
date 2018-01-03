@@ -9,13 +9,13 @@ import (
 	"testbox"
 )
 
-type TestResponse struct {
-	Id          id     `json:"id"`
-	Description string `json:"description"`
-	SampleIO    string `json:"sampleIO"`
-	// ShortName   string   `json:"shortName"`
-	// Tags        []string `json:"tags"`
-}
+// type TestResponse struct {
+// 	Id          id     `json:"id"`
+// 	Description string `json:"description"`
+// 	SampleIO    string `json:"sampleIO"`
+// 	// ShortName   string   `json:"shortName"`
+// 	// Tags        []string `json:"tags"`
+// }
 
 type SubmissionRequest struct {
 	Id       id     `json:"id"`
@@ -40,7 +40,7 @@ func main() {
 
 	box = testbox.New("data/compilers.json")
 
-	http.HandleFunc("/", getTest)
+	http.HandleFunc("/", getChallenge)
 	http.HandleFunc("/submit/", submitTest)
 	http.HandleFunc("/stdout/", getStdout)
 	http.HandleFunc("/languages/", getLangs)
@@ -49,21 +49,20 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-func getTest(w http.ResponseWriter, r *http.Request) {
+func getChallenge(w http.ResponseWriter, r *http.Request) {
 	log.Println("Received request for test...")
 
 	// rand.Seed(time.Now().UTC().UnixNano())
 	// n := rand.Intn(len(testids))
 
 	// temporary hack to check multi-line:
-	testid := "1"
+	challengeID := "1"
 	// testid := testids[n]
-	test := challenges[testid]
+	chal := challenges[challengeID]
 
-	tr := TestResponse{testid, test.Description, test.SampleIO}
-	json, _ := json.MarshalIndent(tr, "", "    ")
+	json, _ := json.MarshalIndent(chal, "", "    ")
 
-	log.Printf("Handing out test %s:\n%s", testid, test.Description)
+	log.Printf("Handing out test %s:\n%s", challengeID, chal.Description)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(json)
