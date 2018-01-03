@@ -2,13 +2,13 @@
     "python": {
         "compiler": "python",
         "sourceFile": "file.py",
-        "boilerplate": "import sys\ninput = sys.stdin.read()\nargs = input.split('|')\n",
+        "boilerplate": "import sys\ninput = sys.stdin.read()\nargs = input.split('\\n')\n",
         "commentPrefix": "#"
     },
     "golang" : {
         "compiler": "go run",
         "sourceFile": "file.go",
-        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n\t\"strings\"\n\t\"fmt\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\\n')\nvar args = strings.Split(input, \"|\")\n",
+        "boilerplate": "package main\nimport (\n\t\"os\"\n\t\"bufio\"\n\t\"strings\"\n\t\"fmt\"\n)\nvar input, _ = bufio.NewReader(os.Stdin).ReadString('\\a')\nvar args = strings.Split(input, \"\\n\")\n",
         "commentPrefix": "\/\/"
     },
     "ruby": {
