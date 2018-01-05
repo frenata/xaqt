@@ -5,12 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
-	"strconv"
 	"testbox"
-	"time"
 )
 
 // type TestResponse struct {
@@ -61,12 +58,12 @@ func main() {
 func getChallenge(w http.ResponseWriter, r *http.Request) {
 	log.Println("Received request for test...")
 
-	rand.Seed(time.Now().UTC().UnixNano())
-	n := rand.Intn(len(challenges))
+	// rand.Seed(time.Now().UTC().UnixNano())
+	// n := rand.Intn(len(challenges))
 
 	// temporary hack to check multi-line:
-	// challengeID := "1"
-	challengeID := strconv.Itoa(n)
+	challengeID := "1"
+	// challengeID := strconv.Itoa(n)
 	challenge := challenges[challengeID]
 
 	json, _ := json.MarshalIndent(challenge, "", "    ")
@@ -89,6 +86,10 @@ func getStdout(w http.ResponseWriter, r *http.Request) {
 
 	output, msg := box.CompileAndPrint(submission.Language, submission.Code, submission.Input)
 	log.Println(output, msg)
+
+	if output == "" {
+		output = "NO OUTPUT"
+	}
 
 	buf, _ := json.MarshalIndent(CompileResult{
 		Raw:     output,

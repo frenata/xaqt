@@ -105,7 +105,7 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 	for i := 0; i < len(inpSlice)-1; i++ {
 
 		if i > len(expSlice)-1 || i > len(resSlice)-1 {
-			results[inpSlice[i]] = "fail"
+			results[inpSlice[i]] = "Fail"
 		} else {
 			log.Printf("Input:\n%v\nOutput:\n%v\nResult:\n%v\n", inpSlice[i], expSlice[i], resSlice[i])
 			results[inpSlice[i]] = passFail(expSlice[i], resSlice[i])
