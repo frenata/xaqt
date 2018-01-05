@@ -105,14 +105,21 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 	for i := 0; i < len(inpSlice)-1; i++ {
 
 		if i > len(expSlice)-1 || i > len(resSlice)-1 {
-			results[inpSlice[i]] = "false"
+			results[inpSlice[i]] = "fail"
 		} else {
 			log.Printf("Input:\n%v\nOutput:\n%v\nResult:\n%v\n", inpSlice[i], expSlice[i], resSlice[i])
-			results[inpSlice[i]] = fmt.Sprintf("%v", expSlice[i] == resSlice[i])
+			results[inpSlice[i]] = passFail(expSlice[i], resSlice[i])
 		}
 	}
 
 	return results
+}
+
+func passFail(a, b string) string {
+	if a == b {
+		return "Pass"
+	}
+	return "Fail"
 }
 
 func mapInToOut(input, res string) map[string]string {
