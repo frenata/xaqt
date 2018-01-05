@@ -135,6 +135,7 @@
         }
     },
     "10": {
+		"ID": "10",
         "description": "can these queens attack each other? print 'error' on invalid position",
         "tags": [
             "chess",
@@ -150,6 +151,7 @@
         }
     },
     "11": {
+		"ID": "11",
         "description": "find the last element of a list",
         "tags": [
             "lists",
@@ -164,6 +166,7 @@
         }
     },
     "12": {
+		"ID": "12",
         "description": "Return the second to last element of input list",
         "tags": [
             "lists",
@@ -178,6 +181,7 @@
         }
     },
     "13": {
+		"ID": "13",
         "description": "find the nth element (1-indexed) of a list",
         "tags": [
             "lists",
@@ -192,6 +196,7 @@
         }
     },
     "14": {
+		"ID": "14",
         "description": "flatten a list",
         "tags": [
             "lists",
@@ -207,6 +212,7 @@
         }
     },
     "15": {
+		"ID": "15",
         "description": "eliminate consectutive duplicates in a list",
         "tags": [
             "lists",
@@ -221,6 +227,7 @@
         }
     },
     "16": {
+		"ID": "16",
         "description": "pack consecutive duplicates into sublists",
         "tags": [
             "lists",
@@ -234,6 +241,7 @@
         }
     },
     "17": {
+		"ID": "17",
         "description": "pack consectutive duplicates into a run length encoding list; singletons should be tagged with a number",
         "tags": [
             "lists",
@@ -248,6 +256,7 @@
         }
     },
     "18": {
+		"ID": "18",
         "description": "pack consectutive duplicates into a run length encoding list; singletons should *not* be tagged with a number",
         "tags": [
             "lists",
@@ -262,6 +271,7 @@
         }
     },
     "19": {
+		"ID": "19",
         "description": "decode a run length encoding list, singletons are not tagged with a number",
         "tags": [
             "lists",
@@ -276,6 +286,7 @@
         }
     },
     "20": {
+		"ID": "20",
         "description": "Return the input string with each character doubled.",
         "tags": [
             "lists",
@@ -290,6 +301,7 @@
         }
     },
 	 "21": {
+		"ID": "21",
 			"description":"Return the largest element in the input list",
 		  "sampleIO": "1,4,5,2 -> 5",
 		  "tags": [
@@ -303,6 +315,7 @@
 		  }
 	},
     "22": {
+		"ID": "22",
             "description": "First input is a search term, second input is a list. Return 'true' if term occurs in list, else 'false'",
             "sampleIO":"dog|cat,mouse,donky,dog -> true",
             "tags": [
@@ -315,6 +328,7 @@
             }
         },
     "23": {
+		"ID": "23",
             "description": "Combine two lists by alternating elements",
             "sampleIO":"a,b,c|1,2,3 → a,1,b,2,c,3",
             "tags": [
@@ -329,6 +343,7 @@
             }
         },
     "24": {
+		"ID": "24",
             "description": "Rotates list arg[0] by arg[1] elements",
             "sampleIO":"1,2,3,4,5,6|2 -> 3,4,5,6,1,2",
             "tags": [
@@ -340,6 +355,7 @@
             }
         },
     "25": {
+		"ID": "25",
             "description": "Take a number and return it's list of digits in ascending order",
             "sampleIO":"3452 -> 2,3,4,5",
             "tags": [
@@ -353,6 +369,7 @@
             }
         },
     "25": {
+		"ID": "25",
             "description": "Take base ten input and return its binary",
             "sampleIO":"25 -> 11001",
             "tags": [
@@ -366,6 +383,7 @@
             }
         },
     "26": {
+		"ID": "26",
         "description": "Is the number prime?",
         "sampleIO": "7 -> true",
         "tags": [
@@ -382,6 +400,7 @@
         }
     },
     "27": {
+		"ID": "27",
         "description": "Find the greatest common divisor of two numbers.",
         "sampleIO": "8|16 -> 8",
         "tags": [
@@ -395,6 +414,7 @@
         }
     },
     "28": {
+		"ID": "28",
         "description": "List all the prime factors of a number.",
         "sampleIO": "315 -> 3,3,5,7",
         "tags": [
@@ -410,6 +430,7 @@
         }
     },
     "29": {
+		"ID": "29",
         "description": "XOR two hexademical numbers together",
         "sampleIO": "45|99 -> dc",
         "tags": [
@@ -424,6 +445,7 @@
         }
     },
     "30": {
+		"ID": "30",
         "description": "bitwise AND two decimal numbers together",
         "sampleIO": "45|99 -> 33",
         "tags": [

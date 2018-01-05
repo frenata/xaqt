@@ -110,6 +110,12 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	log.Printf("submitTest, submission: %s\n", submission)
 
+	if submission.Id == "" {
+		// lack of response crashes client
+		log.Panic("Submission has no challengeID")
+		return
+	}
+
 	challenge := challenges[submission.Id]
 	stdin, stdout := challenge.getCases()
 	log.Printf("submitTest, challenge: %v\n", challenge)
@@ -157,4 +163,7 @@ func init() {
 		panic(err)
 	}
 	log.Println("Challenges file loaded.")
+	// for k, v := range challenges {
+	// 	log.Printf("ID: %s maps to %s", k, v.ID)
+	// }
 }
