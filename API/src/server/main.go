@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"testbox"
+	"time"
 )
 
 // type TestResponse struct {
@@ -29,9 +32,10 @@ func (s SubmissionRequest) String() string {
 	return fmt.Sprintf("( <SubmissionRequest> {ID: %s, Language: %s, Code: Hidden, Input: %s} )", s.Id, s.Language, s.Input)
 }
 
-type SubmissionResponse struct {
-	Output map[string]string `json:"passFail"`
-	Error  testbox.Message   `json:"message"`
+type CompileResult struct {
+	Raw     string            `json:"raw"`
+	Graded  map[string]string `json:"graded"`
+	Message testbox.Message   `json:"message"`
 }
 
 type LanguagesResponse struct {
@@ -57,12 +61,12 @@ func main() {
 func getChallenge(w http.ResponseWriter, r *http.Request) {
 	log.Println("Received request for test...")
 
-	// rand.Seed(time.Now().UTC().UnixNano())
-	// n := rand.Intn(len(testids))
+	rand.Seed(time.Now().UTC().UnixNano())
+	n := rand.Intn(len(challenges))
 
 	// temporary hack to check multi-line:
-	challengeID := "1"
-	// testid := testids[n]
+	// challengeID := "1"
+	challengeID := strconv.Itoa(n)
 	challenge := challenges[challengeID]
 
 	json, _ := json.MarshalIndent(challenge, "", "    ")
@@ -86,7 +90,10 @@ func getStdout(w http.ResponseWriter, r *http.Request) {
 	output, msg := box.CompileAndPrint(submission.Language, submission.Code, submission.Input)
 	log.Println(output, msg)
 
-	buf, _ := json.MarshalIndent(SubmissionResponse{output, msg}, "", "   ")
+	buf, _ := json.MarshalIndent(CompileResult{
+		Raw:     output,
+		Message: msg,
+	}, "", "   ")
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(buf)
@@ -110,7 +117,10 @@ func submitTest(w http.ResponseWriter, r *http.Request) {
 	passed, msg := box.CompileAndChallenge(submission.Language, submission.Code, stdin, stdout)
 	log.Println(passed, msg)
 
-	buf, _ := json.MarshalIndent(SubmissionResponse{passed, msg}, "", "   ")
+	buf, _ := json.MarshalIndent(CompileResult{
+		Graded:  passed,
+		Message: msg,
+	}, "", "   ")
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(buf)

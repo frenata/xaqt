@@ -63,15 +63,17 @@ func (t TestBox) run(language, code, input string) (string, Message) {
 	return result, Message{"success", "testBox", "compilation took " + timeTaken + " seconds"}
 }
 
-func (t TestBox) CompileAndPrint(language, code, input string) (map[string]string, Message) {
+// func (t TestBox) CompileAndPrint(language, code, input string) (map[string]string, Message) {
+func (t TestBox) CompileAndPrint(language, code, input string) (string, Message) {
 	input = input + Seperator
 	result, msg := t.run(language, code, input)
 
-	// log.Printf("CompileAndPrint input: %v", input)
-
-	input = strings.Split(input, Seperator)[0]
+	// input = strings.Split(input, Seperator)[0]
 	result = strings.Split(result, Seperator)[0]
-	return mapInToOut(input, result), msg
+
+	log.Printf("CompileAndPrint result: %v", result)
+	return result, msg
+	// return mapInToOut(input, result), msg
 }
 
 func (t TestBox) CompileAndChallenge(language, code, input, expected string) (map[string]string, Message) {
