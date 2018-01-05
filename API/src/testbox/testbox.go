@@ -52,8 +52,8 @@ func (t TestBox) run(language, code, input string) (string, Message) {
 
 	output, err := sb.Run()
 	if err != nil {
-		log.Println(err)
-		return "", Message{"error", "testBox", fmt.Sprintf("%s", err)}
+		log.Printf("Testbox run error: %v", err)
+		return output, Message{"error", "testBox", fmt.Sprintf("%s", err)}
 	}
 
 	splitOutput := strings.SplitN(output, "*-COMPILEBOX::ENDOFOUTPUT-*", 2)
@@ -71,7 +71,7 @@ func (t TestBox) CompileAndPrint(language, code, input string) (string, Message)
 	// input = strings.Split(input, Seperator)[0]
 	result = strings.Split(result, Seperator)[0]
 
-	log.Printf("CompileAndPrint result: %v", result)
+	// log.Printf("CompileAndPrint result: %v", result)
 	return result, msg
 	// return mapInToOut(input, result), msg
 }
@@ -80,6 +80,7 @@ func (t TestBox) CompileAndChallenge(language, code, input, expected string) (ma
 
 	result, msg := t.run(language, code, input)
 
+	log.Printf("CompAndChal result: %s", result)
 	return compareBlockByBlock(input, expected, result), msg
 }
 
@@ -90,12 +91,12 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 
 	results := make(map[string]string)
 	// log.Printf("compBbyb, input: %v", input)
-	// log.Printf("compBbyb, exp: %v", exp)
-	// log.Printf("compBbyb, res: %v", res)
+	log.Printf("compBbyb, exp: %v", exp)
+	log.Printf("compBbyb, res: %v", res)
 
 	// log.Printf("compBbyb, inpSlice: %v", inpSlice)
-	// log.Printf("compBbyb, expSlice: %v", expSlice)
-	// log.Printf("compBbyb, resSlice: %v", resSlice)
+	log.Printf("compBbyb, expSlice: %v", expSlice)
+	log.Printf("compBbyb, resSlice: %v", resSlice)
 
 	// TODO deal with partial success but incorrect result couont
 	/*if len(expSlice) != len(resSlice) {
@@ -105,10 +106,14 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 	for i := 0; i < len(inpSlice)-1; i++ {
 
 		if i > len(expSlice)-1 || i > len(resSlice)-1 {
-			results[inpSlice[i]] = "Fail"
+			results[inpSlice[i]] = "Error"
 		} else {
 			log.Printf("Input:\n%v\nOutput:\n%v\nResult:\n%v\n", inpSlice[i], expSlice[i], resSlice[i])
-			results[inpSlice[i]] = passFail(expSlice[i], resSlice[i])
+			if resSlice[i] == "" {
+				results[inpSlice[i]] = "Error"
+			} else {
+				results[inpSlice[i]] = passFail(expSlice[i], resSlice[i])
+			}
 		}
 	}
 

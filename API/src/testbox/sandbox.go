@@ -102,15 +102,22 @@ func (s *Sandbox) execute() (string, error) {
 		_ = res
 		//log.Printf("Docker returns: %v", res)
 		errorBytes, err := ioutil.ReadFile(s.options.folder + "/errors")
-		bytes, err := ioutil.ReadFile(s.options.folder + "/completed")
-
-		log.Printf("Completed File: \n%s", string(bytes))
-		// TODO: handle file io errors
-		if len(errorBytes) > 0 {
-			bytes, err = errorBytes, fmt.Errorf("compile error: %s", errorBytes)
+		if err != nil {
+			log.Println("Missing error file")
+		}
+		outputBytes, err := ioutil.ReadFile(s.options.folder + "/completed")
+		if err != nil {
+			log.Println("Missing completed file")
 		}
 
-		return string(bytes), err
+		log.Printf("Completed File: \n%s", string(outputBytes))
+		// TODO: handle file io errors
+
+		if len(errorBytes) > 0 {
+			err = fmt.Errorf("compile error: %s", errorBytes)
+		}
+
+		return string(outputBytes), err
 	case <-time.After(s.options.timeout):
 		log.Println("timed out")
 		return "", fmt.Errorf("Timed out")
