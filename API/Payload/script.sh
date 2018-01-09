@@ -91,7 +91,7 @@ else  # runner was not blank
 				if [ "$p" = "$IN_SEP" ]; then
 					
 					# run program with input
-					OUTPUT="$(echo -n "$INPUT" | $compiler /usercode/$file)"
+					OUTPUT="$(echo -n "$INPUT" | $runner)"
 
 					if [ ${#OUTPUT} = 0 ]; then 
 						# if no input is produced, make a newline (makes later parsing possible)
@@ -116,7 +116,7 @@ else  # runner was not blank
 
 	#Branch 2b : exit code is not zero
 	else
-	    echo "Compilation Failed"
+	    echo "Compilation Failed:"
 	    #if compilation fails, display the output file	
 	    cat /usercode/errors.txt
 	fi

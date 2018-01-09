@@ -10,25 +10,22 @@ func main() {
 	compilerTests := make(map[string]string)
 
 	// need test for Haskell
-	// FIXME no output
 	compilerTests["C++"] = "#include <iostream>\nusing namespace std;\n\nint main() {\n\tcout<<\"Hello\";\n\treturn 0;\n}"
+	compilerTests["Java"] = "\n\nimport java.io.*;\n\nclass myCode\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\t\t\n\t\tSystem.out.println(\"Hello\");\n\t}\n}"
+	compilerTests["C#"] = "using System;\n\npublic class Challenge\n{\n\tpublic static void Main()\n\t{\n\t\t\tConsole.WriteLine(\"Hello\");\n\t}\n}"
+	compilerTests["Clojure"] = "(println \"Hello\")"
+	compilerTests["Perl"] = "use strict;\nuse warnings\n;use v5.14; say 'Hello';"
+	compilerTests["Golang"] = "package main\nimport \"fmt\"\n\nfunc main(){\n  \n\tfmt.Printf(\"Hello\")\n}"
+	compilerTests["JavaScript"] = "console.log(\"Hello\");"
+	compilerTests["Python"] = "print(\"Hello\")"
+	compilerTests["Ruby"] = "puts \"Hello\""
+	compilerTests["Bash"] = "echo 'Hello' "
 	// FIXME
-	// compilerTests["Java"] = "\n\nimport java.io.*;\n\nclass myCode\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\t\t\n\t\tSystem.out.println(\"Hello\");\n\t}\n}"
-	// FIXME
-	// compilerTests["C#"] = "using System;\n\npublic class Challenge\n{\n\tpublic static void Main()\n\t{\n\t\t\tConsole.WriteLine(\"Hello\");\n\t}\n}"
-	// FIXME
-	//compilerTests["Scala"] = "object HelloWorld {def main(args: Array[String]) = println(\"Hello\")}"
+	// compilerTests["Scala"] = "object HelloWorld {def main(args: Array[String]) = println(\"Hello\")}"
 	// FIXME compiler
-	//compilerTests["Rust"] = "fn main() {\n\tprintln!(\"Hello\");\n}"
+	// compilerTests["Rust"] = "fn main() {\n\tprintln!(\"Hello\");\n}"
 	// FIXME
-	//compilerTests["PHP"] = "<?php\n$ho = fopen('php://stdout', \"w\");\n\nfwrite($ho, \"Hello\");\n\n\nfclose($ho);\n"
-	// compilerTests["Clojure"] = "(println \"Hello\")"
-	// compilerTests["Perl"] = "use strict;\nuse warnings\n;use v5.14; say 'Hello';"
-	// compilerTests["Golang"] = "package main\nimport \"fmt\"\n\nfunc main(){\n  \n\tfmt.Printf(\"Hello\")\n}"
-	// compilerTests["JavaScript"] = "console.log(\"Hello\");"
-	// compilerTests["Python"] = "print(\"Hello\")"
-	// compilerTests["Ruby"] = "puts \"Hello\""
-	// compilerTests["Bash"] = "echo 'Hello' "
+	// compilerTests["PHP"] = "<?php\n$ho = fopen('php://stdout', \"w\");\n\nfwrite($ho, \"Hello\");\n\n\nfclose($ho);\n"
 
 	/*
 		"MySQL":"create table myTable(name varchar(10));\ninsert into myTable values(\"Hello\");\nselect * from myTable;",
