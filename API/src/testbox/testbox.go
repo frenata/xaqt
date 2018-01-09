@@ -38,7 +38,7 @@ func New(languagesFile string) TestBox {
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
 func (t TestBox) run(language, code, input string) (string, Message) {
-	log.Printf("TestBox run called with input: %v", input)
+	log.Printf("TestBox launching sandbox...\nLanguage: %s\nStdin: %sCode: Hidden\n", language, input)
 	lang, ok := t.LanguageMap[strings.ToLower(language)]
 	if !ok {
 		return "", Message{"error", "testBox", "language not recognized"}
@@ -77,38 +77,47 @@ func (t TestBox) CompileAndPrint(language, code, input string) (string, Message)
 }
 
 func (t TestBox) CompileAndChallenge(language, code, input, expected string) (map[string]string, Message) {
-
+	if input == "" {
+		log.Printf("CompileAndChallenge received blank 'input', will result in comparison error.\nPlease seperate all inputs (even blanks) with %s", Seperator)
+	}
 	result, msg := t.run(language, code, input)
 
-	log.Printf("CompAndChal result: %s", result)
+	// log.Printf("CompAndChal result: %s", result)
 	return compareBlockByBlock(input, expected, result), msg
 }
 
+// trimSplit: We need to trim last result as seperator method always results an a blank result at the end
+func trimSplit(s string) []string {
+	sl := strings.Split(s, Seperator)
+	return sl[:len(sl)-1]
+}
+
 func compareBlockByBlock(input, exp, res string) map[string]string {
-	inpSlice := strings.Split(input, Seperator)
-	expSlice := strings.Split(exp, Seperator)
-	resSlice := strings.Split(res, Seperator)
+
+	inpSlice := trimSplit(input)
+	expSlice := trimSplit(exp)
+	resSlice := trimSplit(res)
 
 	results := make(map[string]string)
 	// log.Printf("compBbyb, input: %v", input)
-	log.Printf("compBbyb, exp: %v", exp)
-	log.Printf("compBbyb, res: %v", res)
+	// log.Printf("compBbyb, exp: '%v'", exp)
+	// log.Printf("compBbyb, res: '%v'", res)
 
-	// log.Printf("compBbyb, inpSlice: %v", inpSlice)
-	log.Printf("compBbyb, expSlice: %v", expSlice)
-	log.Printf("compBbyb, resSlice: %v", resSlice)
+	log.Printf("compBbyb, inpSlice: %v, len: %d", inpSlice, len(inpSlice))
+	log.Printf("compBbyb, expSlice: %v, len: %d", expSlice, len(expSlice))
+	log.Printf("compBbyb, resSlice: %v, len: %d", resSlice, len(resSlice))
 
 	// TODO deal with partial success but incorrect result couont
 	/*if len(expSlice) != len(resSlice) {
 		return results
 	}*/
 
-	for i := 0; i < len(inpSlice)-1; i++ {
+	for i := 0; i < len(inpSlice); i++ {
 
 		if i > len(expSlice)-1 || i > len(resSlice)-1 {
-			results[inpSlice[i]] = "Error"
+			results[inpSlice[i]] = "ERROR"
 		} else {
-			log.Printf("Input:\n%v\nOutput:\n%v\nResult:\n%v\n", inpSlice[i], expSlice[i], resSlice[i])
+			// log.Printf("Input:\n%v\nOutput:\n%v\nResult:\n%v\n", inpSlice[i], expSlice[i], resSlice[i])
 			if resSlice[i] == "" {
 				results[inpSlice[i]] = "Error"
 			} else {
@@ -116,7 +125,7 @@ func compareBlockByBlock(input, exp, res string) map[string]string {
 			}
 		}
 	}
-
+	log.Printf("Results: %v", results)
 	return results
 }
 

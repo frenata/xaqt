@@ -118,7 +118,7 @@ else  # runner was not blank
 	else
 	    echo "Compilation Failed"
 	    #if compilation fails, display the output file	
-	    #cat /usercode/errors.txt
+	    cat /usercode/errors.txt
 	fi
 fi
 
