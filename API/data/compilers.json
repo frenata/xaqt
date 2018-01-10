@@ -59,5 +59,21 @@
         "sourceFile": "file.hs",
         "optionalExecutable": "/usercode/a.out",
         "commentPrefix": "--"
+    },
+    "scala": {
+        "disabled": "true",
+        "compiler": "scala",
+        "sourceFile": "file.scala"
+    },
+    "php": {
+        "compiler": "php",
+        "sourceFile": "file.php"
+    },
+    "rust": {
+        "disabled":"true",
+        "compiler": "'/opt/rust/.cargo/bin/rustc'",
+        "sourceFile": "file.rs",
+        "optionalExecutable": "/usercode/a.out",
+        "compilerFlags" : "'-o /usercode/a.out'"
     }
 }

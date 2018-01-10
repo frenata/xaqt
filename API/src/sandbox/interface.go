@@ -40,7 +40,7 @@ func New(languagesFile string) Interface {
 func (t Interface) run(language, code, input string) (string, Message) {
 	log.Printf("sandbox launching sandbox...\nLanguage: %s\nStdin: %sCode: Hidden\n", language, input)
 	lang, ok := t.LanguageMap[strings.ToLower(language)]
-	if !ok {
+	if !ok || lang.Disabled == "true" {
 		return "", Message{"error", "sandbox", "language not recognized"}
 	}
 

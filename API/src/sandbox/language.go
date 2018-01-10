@@ -9,4 +9,5 @@ type Language struct {
 	CompilerFlags      string `json:"compilerFlags"`
 	Boilerplate        string `json:"boilerplate"`
 	CommentPrefix      string `json:"commentPrefix"`
+	Disabled           string `json:"disabled"`
 }
