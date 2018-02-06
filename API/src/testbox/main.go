@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"sandbox"
+
+	"github.com/rs/cors"
 )
 
 // type TestResponse struct {
@@ -44,32 +46,43 @@ var box sandbox.Interface
 func main() {
 	port := os.Getenv("TEST_BOX_PORT")
 
+	mux := http.NewServeMux()
 	box = sandbox.New("data/compilers.json")
 
-	http.HandleFunc("/", getChallenge)
-	http.HandleFunc("/submit/", submitTest)
-	http.HandleFunc("/stdout/", getStdout)
-	http.HandleFunc("/languages/", getLangs)
+	mux.HandleFunc("/challenges/get_all/", getAllChallenges)
+	mux.HandleFunc("/", getChallenge)
+	mux.HandleFunc("/submit/", submitTest)
+	mux.HandleFunc("/stdout/", getStdout)
+	mux.HandleFunc("/languages/", getLangs)
 
+	// cors is only here to support non-same-origin hosted librarian script
+	handler := cors.Default().Handler(mux)
 	log.Println("testbox listening on " + port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(http.ListenAndServe(":"+port, handler))
+}
+
+func getAllChallenges(w http.ResponseWriter, r *http.Request) {
+	log.Println("Received request for all challenges...")
+
+	chalList := challenges.GetAll()
+
+	json, _ := json.MarshalIndent(chalList, "", "    ")
+
+	log.Printf("Handing out %d challenges...", len(chalList))
+	// log.Printf("Handing out test, id: %s, desc:%s\n", challenge.Id, challenge.Description)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(json)
 }
 
 func getChallenge(w http.ResponseWriter, r *http.Request) {
-	log.Println("Received request for test...")
+	log.Println("Received request for challenge...")
 
-	// rand.Seed(time.Now().UTC().UnixNano())
-	// n := rand.Intn(len(challenges))
-
-	// temporary hack to check multi-line:
-	// challengeID := "1"
-	// challengeID := strconv.Itoa(n)
-	// challenge := challenges[challengeID]
 	challenge := challenges.Get()
 
 	json, _ := json.MarshalIndent(challenge, "", "    ")
 
-	log.Printf("Handing out test Id: %s, Desc:%s\n", challenge.Id, challenge.Description)
+	log.Printf("Handing out test, id: %s, desc:%s\n", challenge.Id, challenge.Description)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(json)

@@ -4,17 +4,20 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"math/rand"
+	"strconv"
+	"time"
 )
 
 var challenges map[Id]Challenge
 
 func Get() Challenge {
-	// rand.Seed(time.Now().UTC().UnixNano())
-	// n := rand.Intn(len(challenges))
-	// id := strconv.Itoa(n)
-	// return challenges[id]
+	rand.Seed(time.Now().UTC().UnixNano())
+	n := rand.Intn(len(challenges))
+	id := strconv.Itoa(n)
+	return challenges[id]
 
-	return challenges["1"]
+	// return challenges["1"]
 }
 
 func GetById(i Id) Challenge {
