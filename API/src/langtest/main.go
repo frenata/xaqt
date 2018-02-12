@@ -12,17 +12,17 @@ func main() {
 
 	// currently passing:
 
-	// compilerTests["C++"] = "#include <iostream>\nusing namespace std;\n\nint main() {\n\tcout<<\"Hello\";\n\treturn 0;\n}"
-	// compilerTests["Java"] = "\n\nimport java.io.*;\n\nclass myCode\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\t\t\n\t\tSystem.out.println(\"Hello\");\n\t}\n}"
-	// compilerTests["C#"] = "using System;\n\npublic class Challenge\n{\n\tpublic static void Main()\n\t{\n\t\t\tConsole.WriteLine(\"Hello\");\n\t}\n}"
-	// compilerTests["Clojure"] = "(println \"Hello\")"
-	// compilerTests["Perl"] = "use strict;\nuse warnings\n;use v5.14; say 'Hello';"
-	// compilerTests["Golang"] = "package main\nimport \"fmt\"\n\nfunc main(){\n  \n\tfmt.Printf(\"Hello\")\n}"
-	// compilerTests["JavaScript"] = "console.log(\"Hello\");"
-	// compilerTests["Python"] = "print(\"Hello\")"
-	// compilerTests["Ruby"] = "puts \"Hello\""
-	// compilerTests["Bash"] = "echo 'Hello' "
-	// compilerTests["PHP"] = "<?php\n$ho = fopen('php://stdout', \"w\");\n\nfwrite($ho, \"Hello\");\n\n\nfclose($ho);\n"
+	compilerTests["C++"] = "#include <iostream>\nusing namespace std;\n\nint main() {\n\tcout<<\"Hello\";\n\treturn 0;\n}"
+	compilerTests["Java"] = "\n\nimport java.io.*;\n\nclass myCode\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\t\t\n\t\tSystem.out.println(\"Hello\");\n\t}\n}"
+	compilerTests["C#"] = "using System;\n\npublic class Challenge\n{\n\tpublic static void Main()\n\t{\n\t\t\tConsole.WriteLine(\"Hello\");\n\t}\n}"
+	compilerTests["Clojure"] = "(println \"Hello\")"
+	compilerTests["Perl"] = "use strict;\nuse warnings\n;use v5.14; say 'Hello';"
+	compilerTests["Golang"] = "package main\nimport \"fmt\"\n\nfunc main(){\n  \n\tfmt.Printf(\"Hello\")\n}"
+	compilerTests["JavaScript"] = "console.log(\"Hello\");"
+	compilerTests["Python"] = "print(\"Hello\")"
+	compilerTests["Ruby"] = "puts \"Hello\""
+	compilerTests["Bash"] = "echo 'Hello' "
+	compilerTests["PHP"] = "<?php\n$ho = fopen('php://stdout', \"w\");\n\nfwrite($ho, \"Hello\");\n\n\nfclose($ho);\n"
 
 	// currently broken:
 
@@ -41,21 +41,23 @@ func main() {
 		"VB.NET": "Imports System\n\nPublic Class Challenge\n\tPublic Shared Sub Main() \n    \tSystem.Console.WriteLine(\"Hello\")\n\tEnd Sub\nEnd Class",
 	*/
 
-	stdin := "" + sandbox.Seperator
-	expected := "Hello" + sandbox.Seperator
+	stdin := ""
+	expected := "Hello"
 	langResults := make(map[string]string)
 	for lang, code := range compilerTests {
-		out, msg := box.CompileAndChallenge(lang, code, stdin, expected)
+		stdouts, msg := box.EvalWithStdins(lang, code, []string{stdin})
 		// oOut, oMsg := box.CompileAndPrint(lang, code, "test")
-		log.Println(out, msg)
+		log.Println(stdouts[0], msg)
 		// log.Println(oOut, oMsg)
-		langResults[lang] = out[""]
-		if out[""] == "Pass" {
+		if stdouts[0] == expected {
 			log.Printf("%s passed 'Hello' test.", lang)
+			langResults[lang] = "Pass"
 		} else {
-			log.Println(out)
+			log.Println(stdouts)
 			log.Printf("%s failed 'Hello' test.", lang)
+			langResults[lang] = "Fail"
 		}
+
 		fmt.Println("-----------------------------------------------------")
 	}
 
