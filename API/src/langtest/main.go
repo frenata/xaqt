@@ -46,9 +46,9 @@ func main() {
 	langResults := make(map[string]string)
 	for lang, code := range compilerTests {
 		stdouts, msg := box.EvalWithStdins(lang, code, []string{stdin})
-		// oOut, oMsg := box.CompileAndPrint(lang, code, "test")
+
 		log.Println(stdouts[0], msg)
-		// log.Println(oOut, oMsg)
+
 		if stdouts[0] == expected {
 			log.Printf("%s passed 'Hello' test.", lang)
 			langResults[lang] = "Pass"
