@@ -24,14 +24,14 @@ type ExecutionResult struct {
 	Message sandbox.Message `json:"message"`
 }
 
-type LanguagesResponse struct {
-	Languages map[string]sandbox.Language `json:"languages"`
-}
+// type LanguagesResponse struct {
+// 	Languages map[string]sandbox.Language `json:"languages"`
+// }
 
 var box sandbox.Interface
 
 func main() {
-	port := getEnv("COMPILE_PORT", "31337")
+	port := getEnv("COMPILEBOX_PORT", "31337")
 
 	box = sandbox.New("data/compilers.json")
 
@@ -91,7 +91,7 @@ func getLangs(w http.ResponseWriter, r *http.Request) {
 
 	// add boilerplate and comment info
 	log.Println(langs)
-	buf, _ := json.MarshalIndent(LanguagesResponse{langs}, "", "   ")
+	buf, _ := json.MarshalIndent(langs, "", "   ")
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(buf)
