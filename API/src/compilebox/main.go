@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 	"sandbox"
-
-	"github.com/rs/cors"
 )
 
 type CodeSubmission struct {
@@ -33,18 +31,22 @@ type LanguagesResponse struct {
 var box sandbox.Interface
 
 func main() {
-	port := os.Getenv("TEST_BOX_PORT")
+	port := getEnv("COMPILE_PORT", "31337")
 
-	mux := http.NewServeMux()
 	box = sandbox.New("data/compilers.json")
 
-	mux.HandleFunc("/languages/", getLangs)
-	mux.HandleFunc("/eval/", evalCode)
+	http.HandleFunc("/languages/", getLangs)
+	http.HandleFunc("/eval/", evalCode)
 
-	// cors is only here to support non-same-origin librarian script
-	handler := cors.Default().Handler(mux)
 	log.Println("testbox listening on " + port)
-	log.Fatal(http.ListenAndServe(":"+port, handler))
+	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
 
 func evalCode(w http.ResponseWriter, r *http.Request) {
