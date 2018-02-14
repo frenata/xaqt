@@ -12,7 +12,7 @@ import (
 type CodeSubmission struct {
 	Language string   `json:"language"`
 	Code     string   `json:"code"`
-	Stdins   []string `json:"input"`
+	Stdins   []string `json:"stdins"`
 }
 
 func (s CodeSubmission) String() string {
@@ -62,8 +62,8 @@ func evalCode(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	log.Printf("...along with %d stdin inputs", len(submission.Stdins))
-
+	// fmt.Printf("...along with %d stdin inputs\n", len(submission.Stdins))
+	fmt.Println(submission)
 	stdouts, msg := box.EvalWithStdins(submission.Language, submission.Code, submission.Stdins)
 	log.Println(stdouts, msg)
 
@@ -82,17 +82,25 @@ func evalCode(w http.ResponseWriter, r *http.Request) {
 }
 
 func getLangs(w http.ResponseWriter, r *http.Request) {
-	log.Println("Received languages request")
-	langs := make(map[string]sandbox.Language)
+	fmt.Printf("Received languages request...")
+	workingLangs := make(map[string]sandbox.Language)
 
+	// make a list of currently supported languages
 	for k, v := range box.LanguageMap {
-		langs[k] = sandbox.Language{Boilerplate: v.Boilerplate, CommentPrefix: v.CommentPrefix}
+		if v.Disabled != "true" {
+			workingLangs[k] = v
+		}
 	}
 
-	// add boilerplate and comment info
-	log.Println(langs)
-	buf, _ := json.MarshalIndent(langs, "", "   ")
+	fmt.Printf("currently supporting %d of %d known languages\n", len(workingLangs), len(box.LanguageMap))
 
+	// add boilerplate and comment info
+	// log.Println(workingLangs)
+
+	// encode language list
+	buf, _ := json.MarshalIndent(workingLangs, "", "   ")
+
+	// write working language list back to client
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(buf)
 }
