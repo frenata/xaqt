@@ -9,21 +9,24 @@ No two coders have access to each other’s *Docker* or files.
 
 ## Installation Instructions ##
 
+### OS X ###
+
+If running on OS X, ensure that the command `gtimeout` is installed, commonly via `brew install coreutils`.
+
 ### Building the Docker ###
 
  1. Install docker as appropriate for your platform.
- 2. In the subdirectory `Setup`, run `docker build -t virtual_machine .`
+ 2. Run `docker build -t virtual_machine .` in project root.
 
 ### Building the Server ###
 
  1. Install the Go toolchain as appropriate for your platform.
- 2. Presently the server depends on the `gb` build tool, it can be installed via `go get github.com/constabulary/gb/...`
- 3. In the subdirectory `API`, run `gb build`.
+ 2. Run `go get github.com/frenata/compilebox/...`
 
 ### Running the Server ###
 
  1. Set the desired port for compilebox via the environment variable `COMPILEBOX_PORT`.
- 2. From the API subdirectory, run `./bin/compilebox`.
+ 2. From project root, run `compilebox`.
 
 ## Usage Instructions ##
 
