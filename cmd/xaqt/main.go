@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/frenata/compilebox"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/frenata/xaqt"
 )
 
 type CodeSubmission struct {
@@ -21,24 +22,21 @@ func (s CodeSubmission) String() string {
 
 type ExecutionResult struct {
 	Stdouts []string           `json:"stdouts"`
-	Message compilebox.Message `json:"message"`
+	Message xaqt.Message `json:"message"`
 }
 
-// type LanguagesResponse struct {
-// 	Languages map[string]compilebox.Language `json:"languages"`
-// }
-
-var box compilebox.Interface
+// TODO: move into main rather than a global
+var box xaqt.Compilers
 
 func main() {
 	port := getEnv("COMPILEBOX_PORT", "31337")
 
-	box = compilebox.New("data/compilers.json")
+	box = xaqt.New("data/compilers.json")
 
 	http.HandleFunc("/languages/", getLangs)
-	http.HandleFunc("/eval/", evalCode)
+	http.HandleFunc("/evaluate/", evalCode)
 
-	log.Println("testbox listening on " + port)
+	log.Println("xaqt listening on " + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
@@ -62,9 +60,8 @@ func evalCode(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	// fmt.Printf("...along with %d stdin inputs\n", len(submission.Stdins))
-	fmt.Println(submission)
-	stdouts, msg := box.EvalWithStdins(submission.Language, submission.Code, submission.Stdins)
+	//log.Println(submission)
+	stdouts, msg := box.Evaluate(submission.Language, submission.Code, submission.Stdins)
 	log.Println(stdouts, msg)
 
 	if len(stdouts) == 0 {
@@ -82,20 +79,10 @@ func evalCode(w http.ResponseWriter, r *http.Request) {
 }
 
 func getLangs(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("Received languages request...")
-	workingLangs := make(map[string]compilebox.Language)
+	log.Printf("Received languages request...")
 
-	// make a list of currently supported languages
-	for k, v := range box.LanguageMap {
-		if v.Disabled != "true" {
-			workingLangs[k] = v
-		}
-	}
-
-	fmt.Printf("currently supporting %d of %d known languages\n", len(workingLangs), len(box.LanguageMap))
-
-	// add boilerplate and comment info
-	// log.Println(workingLangs)
+	workingLangs := box.AvailableLanguages()
+	log.Printf("currently supporting %d of %d known languages\n", len(workingLangs), len(box))
 
 	// encode language list
 	buf, _ := json.MarshalIndent(workingLangs, "", "   ")

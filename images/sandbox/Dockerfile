@@ -13,7 +13,7 @@ RUN apt-get update
 #Install all the languages/compilers we are supporting.
 RUN apt-get install -y gcc
 RUN apt-get install -y g++
-#RUN apt-get install -y php5-cli
+RUN apt-get install -y php5-cli
 RUN apt-get install -y ruby
 RUN apt-get install -y python
 RUN apt-get install -y mono-xsp2 mono-xsp2-base

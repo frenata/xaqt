@@ -1,5 +1,5 @@
 ## What is it? ##
-CompileBox is a *Docker* based sandbox to run untrusted code and return the output to your app. Users can submit their code in any of the supported languages. The system will test the code in an isolated environment. This way you do not have to worry about untrusted code possibly damaging your server intentionally or unintentionally.
+`xaqt` (*ɛksəkjuti*) is a *Docker* based sandbox to run untrusted code and return the output to your app. Users can submit their code in any of the supported languages. The system will test the code in an isolated environment. This way you do not have to worry about untrusted code possibly damaging your server intentionally or unintentionally.
 
 ## How does it work? ##
 
@@ -16,24 +16,24 @@ If running on OS X, ensure that the command `gtimeout` is installed, commonly vi
 ### Building the Docker ###
 
  1. Install docker as appropriate for your platform.
- 2. Run `docker build -t virtual_machine .` in project root.
+ 2. Run `docker pull frenata/xaqt-sandbox` in project root.
 
 ### Building the Server ###
 
  1. Install the Go toolchain as appropriate for your platform.
- 2. Run `go get github.com/frenata/compilebox/...`
+ 2. Run `go get github.com/frenata/xaqt/...`
 
 ### Running the Server ###
 
- 1. Set the desired port for compilebox via the environment variable `COMPILEBOX_PORT`.
- 2. From project root, run `compilebox`.
+ 1. Set the desired port for xaqt via the environment variable `COMPILEBOX_PORT`.
+ 2. From project root, run `xaqt`.
 
 ## Usage Instructions ##
 
-Interacting with `compilebox` is currently limited to a simple REST api. Two endpoints are exposed by the running server:
+Included with the xaqt library is a simple REST api server. Two endpoints are exposed by the running server:
 
  * GET `/languages/` : This will return a JSON list with the available target languages.
- * POST `/eval/` : This evaluates code, encoded in a JSON body of the following form:
+ * POST `/evaluate/` : This evaluates code, encoded in a JSON body of the following form:
  
 ```
 {
@@ -43,4 +43,4 @@ Interacting with `compilebox` is currently limited to a simple REST api. Two end
 }
 ```
 
-   Returned is a JSON object that reports success or failure of evaluation, and for each element of `stdins`, what the code has printed to `stdout` for that element.`
+   Returned is a JSON object that reports success or failure of evaluation, and for each element of `stdins`, what the code has printed to `stdout` for that element.

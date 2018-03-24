@@ -1,4 +1,4 @@
-package compilebox
+package xaqt
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 )
 
 type Sandbox struct {
-	language Language
+	language ExecutionDetails
 	code     string
 	stdin    string
 	options  SandboxOptions
@@ -33,10 +33,10 @@ func DefaultSandboxOptions() SandboxOptions {
 		tmp = "/tmp"
 	}
 
-	return SandboxOptions{tmp, pwd, "virtual_machine", time.Second * 5}
+	return SandboxOptions{tmp, pwd, "frenata/xaqt-sandbox", time.Second * 5}
 }
 
-func NewSandbox(l Language, code, stdin string, options SandboxOptions) *Sandbox {
+func NewSandbox(l ExecutionDetails, code, stdin string, options SandboxOptions) *Sandbox {
 	box := Sandbox{l, code, stdin, options}
 
 	return &box
