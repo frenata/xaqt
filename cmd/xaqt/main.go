@@ -17,21 +17,29 @@ type CodeSubmission struct {
 }
 
 func (s CodeSubmission) String() string {
-	return fmt.Sprintf("( <CodeSubmission> {Language: %s, Code: Hidden, Stdins: %s} )", s.Language, s.Stdins)
+	return fmt.Sprintf("( <CodeSubmission> {Language: %s, Code: Hidden, Stdins: %s} )",
+		s.Language, s.Stdins)
 }
 
 type ExecutionResult struct {
-	Stdouts []string           `json:"stdouts"`
+	Stdouts []string     `json:"stdouts"`
 	Message xaqt.Message `json:"message"`
 }
 
 // TODO: move into main rather than a global
-var box xaqt.Compilers
+var context *xaqt.Context
 
 func main() {
-	port := getEnv("COMPILEBOX_PORT", "31337")
+	port := getEnv("XAQT_PORT", "31337")
 
-	box = xaqt.New("data/compilers.json")
+	compilers := xaqt.ReadCompilers("data/compilers.json")
+	image := getEnv("XAQT_SANDBOX_IMAGE", "frenata/xaqt-sandbox")
+
+	var err error
+	context, err = xaqt.NewContext(compilers, xaqt.Image(image))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	http.HandleFunc("/languages/", getLangs)
 	http.HandleFunc("/evaluate/", evalCode)
@@ -61,7 +69,7 @@ func evalCode(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	//log.Println(submission)
-	stdouts, msg := box.Evaluate(submission.Language, submission.Code, submission.Stdins)
+	stdouts, msg := context.Evaluate(submission.Language, submission.Code, submission.Stdins)
 	log.Println(stdouts, msg)
 
 	if len(stdouts) == 0 {
@@ -81,8 +89,7 @@ func evalCode(w http.ResponseWriter, r *http.Request) {
 func getLangs(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received languages request...")
 
-	workingLangs := box.AvailableLanguages()
-	log.Printf("currently supporting %d of %d known languages\n", len(workingLangs), len(box))
+	workingLangs := context.Languages()
 
 	// encode language list
 	buf, _ := json.MarshalIndent(workingLangs, "", "   ")

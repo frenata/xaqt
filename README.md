@@ -25,7 +25,7 @@ If running on OS X, ensure that the command `gtimeout` is installed, commonly vi
 
 ### Running the Server ###
 
- 1. Set the desired port for xaqt via the environment variable `COMPILEBOX_PORT`.
+ 1. Set the desired port for xaqt via the environment variable `XAQT_PORT`.
  2. From project root, run `xaqt`.
 
 ## Usage Instructions ##

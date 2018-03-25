@@ -7,48 +7,27 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"time"
 )
 
-type Sandbox struct {
+type sandbox struct {
 	language ExecutionDetails
 	code     string
 	stdin    string
-	options  SandboxOptions
+	options  options
 }
 
-type SandboxOptions struct {
-	folder  string
-	path    string
-	vm_name string
-	timeout time.Duration
+func newSandbox(l ExecutionDetails, code, stdin string, opts options) *sandbox {
+	return &sandbox{l, code, stdin, opts}
 }
 
-func DefaultSandboxOptions() SandboxOptions {
-	pwd, _ := os.Getwd()
-
-	tmp := ""
-	if runtime.GOOS == "darwin" {
-		tmp = "/tmp"
-	}
-
-	return SandboxOptions{tmp, pwd, "frenata/xaqt-sandbox", time.Second * 5}
-}
-
-func NewSandbox(l ExecutionDetails, code, stdin string, options SandboxOptions) *Sandbox {
-	box := Sandbox{l, code, stdin, options}
-
-	return &box
-}
-
-func (s *Sandbox) Run() (string, error) {
+func (s *sandbox) run() (string, error) {
 	s.prepare()
 	return s.execute()
 }
 
-func (s *Sandbox) prepare() {
-	tmpFolder, err := ioutil.TempDir(s.options.folder, "docker-test")
+func (s *sandbox) prepare() {
+	tmpFolder, err := ioutil.TempDir(s.options.folder, "xaqt-")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,7 +61,7 @@ func (s *Sandbox) prepare() {
 	// log msg
 }
 
-func (s *Sandbox) execute() (string, error) {
+func (s *sandbox) execute() (string, error) {
 	defer os.RemoveAll(s.options.folder)
 
 	compiler := s.language.Compiler
@@ -92,7 +71,7 @@ func (s *Sandbox) execute() (string, error) {
 
 	dockerCommand := s.options.path + "/DockerTimeout.sh"
 
-	args := []string{fmt.Sprintf("%s", s.options.timeout), "-u", "mysql", "-i", "-t", "--volume=" + s.options.folder + ":/usercode", s.options.vm_name, "/usercode/script.sh", compiler, filename, optionalExecutable, flags}
+	args := []string{fmt.Sprintf("%s", s.options.timeout), "-u", "mysql", "-i", "-t", "--volume=" + s.options.folder + ":/usercode", s.options.image, "/usercode/script.sh", compiler, filename, optionalExecutable, flags}
 
 	done := make(chan error)
 
@@ -135,7 +114,7 @@ func spawnDocker(dockerCommand string, args []string, done chan error) {
 	done <- err
 }
 
-func (s Sandbox) copyPayload() error {
+func (s *sandbox) copyPayload() error {
 	source := filepath.Join(s.options.path, "Payload")
 	dest := filepath.Join(s.options.folder)
 

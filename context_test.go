@@ -7,7 +7,7 @@ import (
 	"github.com/frenata/xaqt"
 )
 
-var box xaqt.Compilers
+var box *xaqt.Context
 var tests map[string]string
 
 // Test that each compiler, given the appropriate code, can print "Hello"
@@ -45,7 +45,8 @@ func printsHello(t *testing.T, lang, code string) bool {
 }
 
 func init() {
-	box = xaqt.New("data/compilers.json")
+	box, _ = xaqt.NewContext(
+		xaqt.ReadCompilers("data/compilers.json"))
 	tests = map[string]string{
 
 		// currently passing:
