@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/frenata/xaqt.svg?branch=master)](https://travis-ci.org/frenata/xaqt)
+
 ## What is it? ##
 `xaqt` (*ɛksəkjuti*) is a *Docker* based sandbox to run untrusted code and return the output to your app. Users can submit their code in any of the supported languages. The system will test the code in an isolated environment. This way you do not have to worry about untrusted code possibly damaging your server intentionally or unintentionally.
 

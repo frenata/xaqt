@@ -44,7 +44,7 @@
         "commentPrefix": "#"
     },
     "c#": {
-        "compiler": "gmcs",
+        "compiler": "mcs",
         "sourceFile": "file.cs",
         "optionalExecutable": "mono /usercode/file.exe",
         "commentPrefix": "\/\/"
