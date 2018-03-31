@@ -1,8 +1,8 @@
 package xaqt_test
 
 import (
-	"log"
 	"testing"
+	"time"
 
 	"github.com/frenata/xaqt"
 )
@@ -31,22 +31,29 @@ func printsHello(t *testing.T, lang, code string) bool {
 	stdin := ""
 	expected := "Hello"
 	stdouts, msg := box.Evaluate(lang, code, []string{stdin})
+	//log.Println(stdouts[0], msg)
 
-	log.Println(stdouts[0], msg)
+	// check for timeout
+	if msg.Data == "Timed out" { // TODO make proper error type
+		t.Logf("%s timed out during 'Hello' test.", lang)
+		return false
+	}
 
-	if stdouts[0] == expected {
-		t.Logf("%s passed 'Hello' test.", lang)
-		return true
-	} else {
+	if stdouts[0] != expected {
 		t.Log(stdouts)
 		t.Logf("%s failed 'Hello' test.", lang)
 		return false
 	}
+
+	t.Logf("%s passed 'Hello' test.", lang)
+	return true
 }
 
 func init() {
 	box, _ = xaqt.NewContext(
-		xaqt.ReadCompilers("data/compilers.json"))
+		xaqt.ReadCompilers("data/compilers.json"),
+		xaqt.Timeout(time.Second*10))
+
 	tests = map[string]string{
 
 		// currently passing:

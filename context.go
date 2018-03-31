@@ -29,7 +29,7 @@ type options struct {
 
 // Uses default sandbox options.
 func newDefault(compilers Compilers) *Context {
-	c := &Context{compilers: compilers}
+	c := &Context{compilers, options{}}
 	_ = defaultOptions(c)
 	return c
 }
