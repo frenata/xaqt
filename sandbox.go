@@ -71,7 +71,19 @@ func (s *sandbox) execute() (string, error) {
 
 	dockerCommand := s.options.path + "/DockerTimeout.sh"
 
-	args := []string{fmt.Sprintf("%s", s.options.timeout), "-u", "mysql", "-i", "-t", "--volume=" + s.options.folder + ":/usercode", s.options.image, "/usercode/script.sh", compiler, filename, optionalExecutable, flags}
+	args := []string{
+		fmt.Sprintf("%s", s.options.timeout),
+		"-u",
+		"mysql",
+		"-i",
+		"-t",
+		"--volume=" + s.options.folder + ":/usercode",
+		s.options.image,
+		"/usercode/script.sh",
+		compiler,
+		filename,
+		optionalExecutable,
+		flags}
 
 	done := make(chan error)
 
@@ -101,7 +113,7 @@ func (s *sandbox) execute() (string, error) {
 
 		return string(outputBytes), err
 	case <-time.After(s.options.timeout):
-		log.Println("timed out")
+		log.Printf("%s timed out", s.language.Compiler)
 		return "", fmt.Errorf("Timed out")
 	}
 }
@@ -109,7 +121,6 @@ func (s *sandbox) execute() (string, error) {
 func spawnDocker(dockerCommand string, args []string, done chan error) {
 	cmd := exec.Command(dockerCommand, args...)
 	bytes, err := cmd.CombinedOutput()
-	_ = bytes
 	log.Printf("Docker stdout: %v", string(bytes))
 	done <- err
 }

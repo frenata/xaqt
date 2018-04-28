@@ -9,3 +9,6 @@ services:
 
 before_install:
   - docker pull frenata/xaqt-sandbox
+
+before_script:
+  - sleep 20
