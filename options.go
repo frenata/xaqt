@@ -14,10 +14,19 @@ import (
 // Idea taken from https://dave.cheney.net/2014/10/17/functional-options-for-friendly-apis
 type option func(*Context) error
 
+func DataPath() string {
+	gopath, ok := os.LookupEnv("GOPATH")
+	if !ok {
+		panic("Error locating data path, go GOPATH set")
+	}
+
+	return filepath.Join(gopath, "src/github.com/frenata/xaqt/data/")
+}
+
 // defaultOptions provides some useful defaults if the user provides none.
 func defaultOptions(c *Context) error {
-	pwd, _ := os.Getwd()
-	c.path = filepath.Join(pwd, "data")
+
+	c.path = DataPath()
 
 	if runtime.GOOS == "darwin" {
 		c.folder = "/tmp"
