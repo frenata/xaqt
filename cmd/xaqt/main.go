@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/frenata/xaqt"
 )
@@ -32,12 +33,7 @@ var context *xaqt.Context
 func main() {
 	port := getEnv("XAQT_PORT", "31337")
 
-	gopath, ok := os.LookupEnv("GOPATH")
-	if !ok {
-		panic("No gopath found, cannot locate compilers.json")
-	}
-
-	compilers := xaqt.ReadCompilers(gopath + "/src/github.com/frenata/xaqt/data/compilers.json")
+	compilers := xaqt.ReadCompilers(filepath.Join(xaqt.DataPath(), "compilers.json"))
 	image := getEnv("XAQT_SANDBOX_IMAGE", "frenata/xaqt-sandbox")
 
 	var err error
