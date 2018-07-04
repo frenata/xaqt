@@ -62,14 +62,19 @@ func getEnv(key, fallback string) string {
 func evalCode(w http.ResponseWriter, r *http.Request) {
 	log.Println("Received code subimssion...")
 	decoder := json.NewDecoder(r.Body)
+	defer r.Body.Close()
+
 	var submission CodeSubmission
 	err := decoder.Decode(&submission)
 	if err != nil {
-		panic(err)
-	}
-	defer r.Body.Close()
+		log.Printf("Error: failed to parse code submission: %s", err)
 
-	//log.Println(submission)
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte("\"error\": \"unable to parse code submission\""))
+		return
+	}
+
+	// log.Println("submission: ", submission)
 	stdouts, msg := context.Evaluate(submission.Language, submission.Code, submission.Stdins)
 	log.Println(stdouts, msg)
 

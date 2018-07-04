@@ -37,12 +37,12 @@ func ReadCompilers(filename string) Compilers {
 
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Fatalf("Failed to read language file: %s", err)
+		log.Fatalf("Fatal: failed to read language file: %s", err)
 	}
 
 	err = json.Unmarshal(bytes, &compilerMap)
 	if err != nil {
-		log.Fatalf("Failed to parse JSON: %s", err)
+		log.Fatalf("Fatal: failed to parse JSON: %s", err)
 	}
 
 	return compilerMap

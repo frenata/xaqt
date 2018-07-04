@@ -18,7 +18,7 @@ type option func(*Context) error
 func DataPath() string {
 	gopath, ok := os.LookupEnv("GOPATH")
 	if !ok {
-		log.Fatal("Error: 'GOPATH' is not set, cannot locate the data path.")
+		log.Fatal("Fatal: 'GOPATH' is not set, cannot locate the data path.")
 	}
 
 	return filepath.Join(gopath, "src/github.com/frenata/xaqt/data/")
