@@ -1,6 +1,7 @@
 package xaqt
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -17,7 +18,7 @@ type option func(*Context) error
 func DataPath() string {
 	gopath, ok := os.LookupEnv("GOPATH")
 	if !ok {
-		panic("Error locating data path, go GOPATH set")
+		log.Fatal("Error: 'GOPATH' is not set, cannot locate the data path.")
 	}
 
 	return filepath.Join(gopath, "src/github.com/frenata/xaqt/data/")
