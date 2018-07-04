@@ -54,7 +54,7 @@ func getEnv(key, fallback string) string {
 		return value
 	}
 
-	log.Printf("Environment variable %s not found, setting to %s", key, fallback)
+	log.Printf("Warning: environment variable %s not found, setting to %s", key, fallback)
 	os.Setenv(key, fallback)
 	return fallback
 }
