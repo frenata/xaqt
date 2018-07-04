@@ -70,7 +70,7 @@ func (c *Context) run(language, code, stdinGlob string) (string, Message) {
 		return "", Message{"error", "no code submitted"}
 	}
 
-	sb := newSandbox(lang, code, stdinGlob, c.options)
+	sb := newSandbox(lang.ExecutionDetails, code, stdinGlob, c.options)
 
 	output, err := sb.run()
 	if err != nil {
@@ -86,4 +86,4 @@ func (c *Context) run(language, code, stdinGlob string) (string, Message) {
 }
 
 // Languages returns a list of available language names.
-func (c *Context) Languages() []string { return c.compilers.availableLanguages() }
+func (c *Context) Languages() map[string]CompositionDetails { return c.compilers.availableLanguages() }
