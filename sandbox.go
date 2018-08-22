@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"time"
 
@@ -27,7 +28,7 @@ type sandbox struct {
 	// sandbox id (uuidV4)
 	ID       string
 	language ExecutionDetails
-	code     string
+	code     Code
 	stdin    string
 	options  options
 	// docker client connection
@@ -38,9 +39,20 @@ type sandbox struct {
 	errChan <-chan error
 }
 
+// describes how the user Code is represented/structured. either it is in memory as a string,
+// or it has been persisted to a file. additionally, the user can include resource files.
+//
+type Code struct {
+	IsFile            bool     // is the code in a file or a string
+	String            string   // the code represented as a string
+	SourceFileName    string   // the name of the src file the code has been written to
+	ResourceFileNames []string // file names for resources used by source file
+	Path              string   // the path to the src file and possibly resource files
+}
+
 // constructs a new sandbox given...
 //
-func newSandbox(l ExecutionDetails, code, stdin string, opts options) (*sandbox, error) {
+func newSandbox(l ExecutionDetails, code Code, stdin string, opts options) (*sandbox, error) {
 	var (
 		s   *sandbox
 		err error
@@ -157,12 +169,36 @@ func (s *sandbox) PrepareTmpDir() error {
 		return err
 	}
 
-	// write source file into tmp dir
-	// TODO (cw|4.29.2018) we should be able to write an arbitrary number of files
-	// to the tmp dir.
-	err = ioutil.WriteFile(tmpFolder+"/"+s.language.SourceFile, []byte(s.code), 0777)
-	if err != nil {
-		return err
+	// write source file and possibly resource files into tmp dir
+	// TODO (cw|8.22.2018) eventually don't move around these files, just specify another
+	// mount directory for where these files should live...
+	switch s.code.IsFile {
+	case true:
+		// move source file into tmp dir
+		err = os.Rename(
+			path.Join(s.code.Path, s.code.SourceFileName),
+			path.Join(tmpFolder, s.code.SourceFileName),
+		)
+		if err != nil {
+			return err
+		}
+
+		// move resource files into tmp dir
+		for _, ResourceFileName := range s.code.ResourceFileNames {
+			err = os.Rename(
+				path.Join(s.code.Path, ResourceFileName),
+				path.Join(tmpFolder, ResourceFileName),
+			)
+			if err != nil {
+				return err
+			}
+		}
+	case false:
+		// write source file into tmp dir
+		err = ioutil.WriteFile(tmpFolder+"/"+s.language.SourceFile, []byte(s.code.String), 0777)
+		if err != nil {
+			return err
+		}
 	}
 
 	// write a file for stdin

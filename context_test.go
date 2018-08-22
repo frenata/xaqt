@@ -27,9 +27,13 @@ func TestCompilers(t *testing.T) {
 	}
 }
 
-func printsHello(t *testing.T, lang, code string) bool {
+func printsHello(t *testing.T, lang, codeString string) bool {
 	stdin := ""
 	expected := "Hello"
+	code := xaqt.Code{
+		IsFile: false,
+		String: codeString,
+	}
 	stdouts, msg := box.Evaluate(lang, code, []string{stdin})
 	//log.Println(stdouts[0], msg)
 

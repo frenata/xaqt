@@ -50,7 +50,7 @@ func NewContext(compilers Compilers, options ...option) (*Context, error) {
 }
 
 // Evaluate code in a given language and for a set of 'stdin's.
-func (c *Context) Evaluate(language, code string, stdins []string) ([]string, Message) {
+func (c *Context) Evaluate(language string, code Code, stdins []string) ([]string, Message) {
 	stdinGlob := glob(stdins)
 	results, msg := c.run(language, code, stdinGlob)
 
@@ -59,7 +59,7 @@ func (c *Context) Evaluate(language, code string, stdins []string) ([]string, Me
 
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
-func (c *Context) run(language, code, stdinGlob string) (string, Message) {
+func (c *Context) run(language string, code Code, stdinGlob string) (string, Message) {
 	log.Printf("launching new %s sandbox", language)
 	// log.Printf("launching sandbox...\nLanguage: %s\nStdin: %sCode: Hidden\n", language, stdinGlob)
 
@@ -68,7 +68,7 @@ func (c *Context) run(language, code, stdinGlob string) (string, Message) {
 		return "", Message{"error", "language not supported"}
 	}
 
-	if code == "" {
+	if !code.IsFile && code.String == "" {
 		return "", Message{"error", "no code submitted"}
 	}
 
