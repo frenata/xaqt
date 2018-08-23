@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path"
 	"path/filepath"
 	"time"
 
@@ -148,7 +147,7 @@ func (s *sandbox) prepare() error {
 // and execution payload) into a temporary directory.
 //
 func (s *sandbox) PrepareTmpDir() error {
-	// create tmp directory for keeping all code and inputs
+	// create tmp directory for keeping all code, inputs, and results
 	tmpFolder, err := ioutil.TempDir(s.options.folder, TmpDirPrefix)
 	if err != nil {
 		return err
@@ -170,24 +169,22 @@ func (s *sandbox) PrepareTmpDir() error {
 	}
 
 	// write source file and possibly resource files into tmp dir
-	// TODO (cw|8.22.2018) eventually don't move around these files, just specify another
-	// mount directory for where these files should live...
 	switch s.code.IsFile {
 	case true:
-		// move source file into tmp dir
-		err = os.Rename(
-			path.Join(s.code.Path, s.code.SourceFileName),
-			path.Join(tmpFolder, s.code.SourceFileName),
+		// copy source file into tmp dir
+		err = s.copyFile(
+			filepath.Join(s.code.Path, s.code.SourceFileName),
+			filepath.Join(tmpFolder, s.code.SourceFileName),
 		)
 		if err != nil {
 			return err
 		}
 
-		// move resource files into tmp dir
+		// copy resource files into tmp dir
 		for _, ResourceFileName := range s.code.ResourceFileNames {
-			err = os.Rename(
-				path.Join(s.code.Path, ResourceFileName),
-				path.Join(tmpFolder, ResourceFileName),
+			err = s.copyFile(
+				filepath.Join(s.code.Path, ResourceFileName),
+				filepath.Join(tmpFolder, ResourceFileName),
 			)
 			if err != nil {
 				return err
@@ -296,8 +293,9 @@ func (s *sandbox) execute() (string, error) {
 		ctx = context.Background()
 		err error
 	)
-	// delete temporary directory once we have finished execution
-	defer os.RemoveAll(s.options.folder)
+
+	// defer cleanup
+	defer s.cleanup()
 
 	// okay lets start the container...
 	err = s.docker.ContainerStart(
@@ -348,6 +346,68 @@ func (s *sandbox) execute() (string, error) {
 	}
 }
 
+func (s *sandbox) cleanup() {
+	// optionally rewrite source and resource files
+	if true {
+		err := s.rewriteUserFiles()
+		if err != nil {
+			log.Fatalf("unable to rewrite files to %s", s.code.Path)
+		}
+	}
+
+	// delete temporary directory once we have finished execution
+	os.RemoveAll(s.options.folder)
+}
+
+// overwrites the original source and resource files supplied by the user with those from
+// the tmp execution directory after execution has successfully completed.
+// you may be wondering:
+// (1) Why would we ever want to do this?
+//        In situations where the code the user supplies modifies itself or its resource files
+//        and we want these changes to persist.
+// (2) When would this situation ever occur?
+//        If the user code will be run multiple times and must maintain state between calls. A
+//        perfect example is a machine learning model which needs to update its parameters
+//        between subsequent calls.
+//
+func (s *sandbox) rewriteUserFiles() error {
+	var (
+		err error
+	)
+
+	// only proceed if the source code is in a file
+	if !s.code.IsFile {
+		return nil
+	}
+
+	// TODO (cw|8.23.2018) add some checks here to ensure that the files aren't
+	// too large.
+
+	// copy tmp source file into original dir
+	err = s.copyFile(
+		filepath.Join(s.options.folder, s.code.SourceFileName),
+		filepath.Join(s.code.Path, s.code.SourceFileName),
+	)
+	if err != nil {
+		return err
+	}
+
+	// copy tmp resource files into original dir
+	for _, ResourceFileName := range s.code.ResourceFileNames {
+		err = s.copyFile(
+			filepath.Join(s.options.folder, ResourceFileName),
+			filepath.Join(s.code.Path, ResourceFileName),
+		)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// utility for copying the Payload dir.
+//
 func (s *sandbox) copyPayload() error {
 	source := filepath.Join(s.options.path, "Payload")
 	dest := filepath.Join(s.options.folder)
@@ -366,16 +426,26 @@ func (s *sandbox) copyPayload() error {
 		// read the file
 		destfile := dest + "/" + file.Name()
 		sourcefile := source + "/" + file.Name()
-		bytes, err := ioutil.ReadFile(sourcefile)
+		err = s.copyFile(sourcefile, destfile)
 		if err != nil {
 			return err
 		}
+	}
 
-		// write the file to tmp
-		err = ioutil.WriteFile(destfile, bytes, 0777)
-		if err != nil {
-			return err
-		}
+	return nil
+}
+
+// short utility for easily copying files
+//
+func (s *sandbox) copyFile(src, dest string) error {
+	bytes, err := ioutil.ReadFile(src)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(dest, bytes, 0777)
+	if err != nil {
+		return err
 	}
 
 	return nil

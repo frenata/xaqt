@@ -10,6 +10,8 @@ import (
 var box *xaqt.Context
 var tests map[string]string
 
+// these are high level functional tests which test the user facing API.
+
 // Test that each compiler, given the appropriate code, can print "Hello"
 func TestCompilers(t *testing.T) {
 	langResults := make(map[string]bool)
