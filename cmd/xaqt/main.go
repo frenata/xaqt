@@ -33,7 +33,7 @@ var context *xaqt.Context
 func main() {
 	port := getEnv("XAQT_PORT", "31337")
 
-	compilers := xaqt.ReadCompilers(filepath.Join(xaqt.DataPath(), "compilers.json"))
+	compilers := xaqt.ReadCompilersFromFile(filepath.Join(xaqt.DataPath(), "compilers.json"))
 	image := getEnv("XAQT_SANDBOX_IMAGE", "frenata/xaqt-sandbox")
 
 	var err error

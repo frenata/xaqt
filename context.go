@@ -64,7 +64,7 @@ func (c *Context) run(language, code, stdinGlob string) (string, Message) {
 	// log.Printf("launching sandbox...\nLanguage: %s\nStdin: %sCode: Hidden\n", language, stdinGlob)
 
 	lang, ok := c.compilers[strings.ToLower(language)]
-	if !ok || lang.Disabled == "true" {
+	if !ok || lang.Disabled {
 		return "", Message{"error", "language not supported"}
 	}
 

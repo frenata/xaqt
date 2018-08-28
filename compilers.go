@@ -7,16 +7,13 @@ import (
 	"log"
 )
 
-// Compilers maps language names to the details of how to execute code in that language.
-type Compilers map[string]CompilerDetails
-
 // ExecutionDetails specifies how to execute certain code.
 type ExecutionDetails struct {
 	Compiler           string `json:"compiler"`
 	SourceFile         string `json:"sourceFile"`
 	OptionalExecutable string `json:"optionalExecutable"`
 	CompilerFlags      string `json:"compilerFlags"`
-	Disabled           string `json:"disabled"`
+	Disabled           bool   `json:"disabled"`
 }
 
 // CompositionDetails specifies how to write code in a given language
@@ -31,8 +28,27 @@ type CompilerDetails struct {
 	CompositionDetails
 }
 
-// ReadCompilers reads a compilers map from a file.
-func ReadCompilers(filename string) Compilers {
+// Compilers maps language names to the details of how to execute code in that language.
+type Compilers map[string]CompilerDetails
+
+// availableLanguages returns a list of currently supported languages.
+func (c Compilers) availableLanguages() map[string]CompositionDetails {
+	fmt.Printf("Received languages request...")
+	langs := make(map[string]CompositionDetails)
+
+	// make a list of currently supported languages
+	for k, v := range c {
+		if !v.Disabled {
+			langs[k] = v.CompositionDetails
+		}
+	}
+
+	log.Printf("currently supporting %d of %d known languages\n", len(langs), len(c))
+	return langs
+}
+
+// ReadCompilersFromFile reads a compilers map from a file.
+func ReadCompilersFromFile(filename string) Compilers {
 	compilerMap := make(Compilers, 0)
 
 	bytes, err := ioutil.ReadFile(filename)
@@ -48,18 +64,23 @@ func ReadCompilers(filename string) Compilers {
 	return compilerMap
 }
 
-// availableLanguages returns a list of currently supported languages.
-func (c Compilers) availableLanguages() map[string]CompositionDetails {
-	fmt.Printf("Received languages request...")
-	langs := make(map[string]CompositionDetails)
+// write a compilers map to a json file.
+//
+func (c Compilers) ExportToJSON(filename string) error {
+	var (
+		err error
+	)
 
-	// make a list of currently supported languages
-	for k, v := range c {
-		if v.Disabled != "true" {
-			langs[k] = v.CompositionDetails
-		}
+	bytes, err := json.MarshalIndent(c, "", "    ")
+	if err != nil {
+		return err
 	}
 
-	log.Printf("currently supporting %d of %d known languages\n", len(langs), len(c))
-	return langs
+	// write json to file
+	err = ioutil.WriteFile(filename, bytes, 0777)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
