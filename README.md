@@ -36,7 +36,7 @@ Included with the xaqt library is a simple REST api server. Two endpoints are ex
 
  * GET `/languages/` : This will return a JSON list with the available target languages.
  * POST `/evaluate/` : This evaluates code, encoded in a JSON body of the following form:
- 
+
 ```
 {
     "language": "python",
@@ -46,3 +46,7 @@ Included with the xaqt library is a simple REST api server. Two endpoints are ex
 ```
 
    Returned is a JSON object that reports success or failure of evaluation, and for each element of `stdins`, what the code has printed to `stdout` for that element.
+
+## Development ##
+### Vendoring ##
+we currently use [`govendor`](https://github.com/kardianos/govendor) as our vendoring tool for external dependencies.

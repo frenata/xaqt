@@ -38,22 +38,21 @@ addtionalArg=$4
 #	
 ########################################################################
 
+# redirect stdout --> logfile.txt & stderr --> errors
 exec  1> $"/usercode/logfile.txt"
 exec  2> $"/usercode/errors"
-#3>&1 4>&2 >
+
 
 START=$(date +%s.%2N)
 NL=$'\n'
 FIRST_LINE="TRUE"
+# the separator values below are also maintained in glob.go in project root dir...
 IN_SEP="*-BRK-*"
 OUT_SEP="*-BRK-*"
-#Branch 1
+
+# Branch 1: we are calling an interpreter (no compilation step)
 if [ "$runner" = "" ]; then
-    # while read p; do 
-    #     echo -n $p | $compiler /usercode/$file
-    # done < $"/usercode/inputFile"
-    # Reads until reaching $SEP and then runs command with that
-    # block of input
+        # Reads until reaching $SEP and then runs command with that block of input
 	while read p; do
 		if [ "$p" = "$IN_SEP" ]; then
 			
@@ -84,7 +83,8 @@ if [ "$runner" = "" ]; then
 #Branch 2
 else  # runner was not blank
 	#In case of compile errors, redirect them to a file
-    $compiler /usercode/$file $addtionalArg > /dev/null #&> /usercode/errors.txt
+        $compiler /usercode/$file $addtionalArg > /dev/null #&> /usercode/errors.txt
+
 	#Branch 2a : exit code is zero aka success
 	if [ $? -eq 0 ];	then
 			while read p; do
@@ -118,7 +118,7 @@ else  # runner was not blank
 	else
 	    echo "Compilation Failed:"
 	    #if compilation fails, display the output file	
-	    cat /usercode/errors.txt
+	    cat /usercode/errors
 	fi
 fi
 
