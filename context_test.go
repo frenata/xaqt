@@ -51,7 +51,7 @@ func printsHello(t *testing.T, lang, code string) bool {
 
 func init() {
 	box, _ = xaqt.NewContext(
-		xaqt.ReadCompilersFromFile("data/compilers.json"),
+		xaqt.GetCompilers(),
 		xaqt.Timeout(time.Second*10))
 
 	tests = map[string]string{

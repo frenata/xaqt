@@ -33,7 +33,7 @@ func defaultOptions(c *Context) error {
 		c.folder = "/tmp"
 	}
 
-	c.image = "frenata/xaqt-sandbox"
+	c.image = "connorwalsh/xaqt" //"frenata/xaqt-sandbox"
 
 	c.timeout = time.Second * 5
 	return nil

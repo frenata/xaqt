@@ -38,6 +38,9 @@ addtionalArg=$4
 #	
 ########################################################################
 
+# move the submitted files to the entrypoint execution environment
+# mv /usercode/* /entrypoint/usercode
+
 # redirect stdout --> logfile.txt & stderr --> errors
 exec  1> $"/usercode/logfile.txt"
 exec  2> $"/usercode/errors"
@@ -133,5 +136,6 @@ runtime=$(echo "$END - $START" | bc)
 echo "*-COMPILEBOX::ENDOFOUTPUT-*" $runtime 
 
 
+# mv /entrypoint/usercode/* /usercode
 mv /usercode/logfile.txt /usercode/completed
 

@@ -47,9 +47,21 @@ func (c Compilers) availableLanguages() map[string]CompositionDetails {
 	return langs
 }
 
-// ReadCompilersFromFile reads a compilers map from a file.
-func ReadCompilersFromFile(filename string) Compilers {
-	compilerMap := make(Compilers, 0)
+// GetCompilers reads a compilers map from a file.
+func GetCompilers(filenames ...string) Compilers {
+	var (
+		filename    string
+		compilerMap = make(Compilers, 0)
+		err         error
+	)
+
+	if len(filenames) > 0 {
+		// just use the first filename
+		filename = filenames[0]
+	} else {
+		// return default compilers if no filename is provided
+		return COMPILERS
+	}
 
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {

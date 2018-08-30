@@ -33,7 +33,8 @@ RUN apt-get install -y clojure
 
 
 #prepare for Java download
-RUN apt-get install -y python-software-properties
+# commenting out according to: https://askubuntu.com/questions/422975/e-package-python-software-properties-has-no-installation-candidate
+# RUN apt-get install -y python-software-properties
 RUN apt-get install -y software-properties-common
 
 #grab oracle java (auto accept licence)
@@ -64,3 +65,8 @@ RUN echo "mysql ALL = NOPASSWD: /usr/sbin/service mysql start" | cat >> /etc/sud
 
 # install stack for haskell
 RUN apt-get install -y haskell-platform
+
+# copy entrypoint directory into image.
+COPY ./entrypoint /entrypoint
+
+RUN chmod 700 /entrypoint/usercode

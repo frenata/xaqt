@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/docker/docker/api/types"
@@ -150,13 +149,6 @@ func (s *sandbox) PrepareTmpDir() error {
 	// record tmpdir for easy deletion
 	s.options.folder = tmpFolder
 
-	// copy the Payload dir into the tmp dir. for more details on what the
-	// Payload dir is, check out the TODO (cw|4.29.2018) fill this in...
-	err = s.copyPayload()
-	if err != nil {
-		return err
-	}
-
 	// write source file into tmp dir
 	// TODO (cw|4.29.2018) we should be able to write an arbitrary number of files
 	// to the tmp dir.
@@ -188,7 +180,7 @@ func (s *sandbox) PrepareContainer() error {
 		&container.Config{
 			Image: s.options.image,
 			Cmd: []string{
-				"/usercode/script.sh",
+				"/entrypoint/script.sh",
 				s.language.Compiler,
 				s.language.SourceFile,
 				s.language.OptionalExecutable,
@@ -205,7 +197,7 @@ func (s *sandbox) PrepareContainer() error {
 			// remove container from host once it exits
 			AutoRemove: true,
 			// specify the mount point(s) for the sandbox
-			Binds: []string{s.options.folder + ":/usercode"},
+			Binds: []string{s.options.folder + ":/usercode"}, // previously /usercode
 		},
 		nil, // no network config currently
 		s.ID,
@@ -310,39 +302,6 @@ func (s *sandbox) execute() (string, error) {
 		log.Printf("%s timed out", s.language.Compiler)
 		return "", fmt.Errorf("Timed out")
 	}
-}
-
-func (s *sandbox) copyPayload() error {
-	source := filepath.Join(s.options.path, "Payload")
-	dest := filepath.Join(s.options.folder)
-
-	directory, err := os.Open(source)
-	if err != nil {
-		return err
-	}
-
-	files, err := directory.Readdir(-1)
-	if err != nil {
-		return err
-	}
-
-	for _, file := range files {
-		// read the file
-		destfile := dest + "/" + file.Name()
-		sourcefile := source + "/" + file.Name()
-		bytes, err := ioutil.ReadFile(sourcefile)
-		if err != nil {
-			return err
-		}
-
-		// write the file to tmp
-		err = ioutil.WriteFile(destfile, bytes, 0777)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 // TODO (cw|4.29.2018) this cleanup should be in Context (which is initialized once in the

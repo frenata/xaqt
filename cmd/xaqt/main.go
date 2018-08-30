@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 
 	"github.com/frenata/xaqt"
 )
@@ -33,7 +32,7 @@ var context *xaqt.Context
 func main() {
 	port := getEnv("XAQT_PORT", "31337")
 
-	compilers := xaqt.ReadCompilersFromFile(filepath.Join(xaqt.DataPath(), "compilers.json"))
+	compilers := xaqt.GetCompilers()
 	image := getEnv("XAQT_SANDBOX_IMAGE", "frenata/xaqt-sandbox")
 
 	var err error

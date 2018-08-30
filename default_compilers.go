@@ -65,7 +65,7 @@ var COMPILERS = Compilers{
 		ExecutionDetails{
 			Compiler:           "javac",
 			SourceFile:         "file.java",
-			OptionalExecutable: "/usercode/javaRunner.sh",
+			OptionalExecutable: "/entrypoint/javaRunner.sh",
 		},
 		CompositionDetails{
 			CommentPrefix: "//",
