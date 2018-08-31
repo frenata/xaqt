@@ -33,7 +33,7 @@ func main() {
 	port := getEnv("XAQT_PORT", "31337")
 
 	compilers := xaqt.GetCompilers()
-	image := getEnv("XAQT_SANDBOX_IMAGE", "frenata/xaqt-sandbox")
+	image := getEnv("XAQT_SANDBOX_IMAGE", xaqt.DEFAULT_DOCKER_IMAGE)
 
 	var err error
 	context, err = xaqt.NewContext(compilers, xaqt.Image(image))

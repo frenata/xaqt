@@ -3,7 +3,7 @@ package xaqt
 // the compilers included with the xaqt package.
 // TODO (cw|8.26.2018) auto marshall into json when tests are run...this way
 // users who want to use their own compilers.json will have a useful template.
-var COMPILERS = Compilers{
+var DEFAULT_COMPILERS = Compilers{
 	"python": CompilerDetails{
 		ExecutionDetails{
 			Compiler:   "python",

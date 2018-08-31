@@ -60,7 +60,7 @@ func GetCompilers(filenames ...string) Compilers {
 		filename = filenames[0]
 	} else {
 		// return default compilers if no filename is provided
-		return COMPILERS
+		return DEFAULT_COMPILERS
 	}
 
 	bytes, err := ioutil.ReadFile(filename)
