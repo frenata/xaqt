@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/docker/docker/api/types"
@@ -26,7 +27,7 @@ type sandbox struct {
 	// sandbox id (uuidV4)
 	ID       string
 	language ExecutionDetails
-	code     string
+	code     Code
 	stdin    string
 	options  options
 	// docker client connection
@@ -37,9 +38,20 @@ type sandbox struct {
 	errChan <-chan error
 }
 
+// describes how the user Code is represented/structured. either it is in memory as a string,
+// or it has been persisted to a file. additionally, the user can include resource files.
+//
+type Code struct {
+	IsFile            bool     // is the code in a file or a string
+	String            string   // the code represented as a string
+	SourceFileName    string   // the name of the src file the code has been written to
+	ResourceFileNames []string // file names for resources used by source file
+	Path              string   // the path to the src file and possibly resource files
+}
+
 // constructs a new sandbox given...
 //
-func newSandbox(l ExecutionDetails, code, stdin string, opts options) (*sandbox, error) {
+func newSandbox(l ExecutionDetails, code Code, stdin string, opts options) (*sandbox, error) {
 	var (
 		s   *sandbox
 		err error
@@ -135,7 +147,7 @@ func (s *sandbox) prepare() error {
 // and execution payload) into a temporary directory.
 //
 func (s *sandbox) PrepareTmpDir() error {
-	// create tmp directory for keeping all code and inputs
+	// create tmp directory for keeping all code, inputs, and results
 	tmpFolder, err := ioutil.TempDir(s.options.folder, TmpDirPrefix)
 	if err != nil {
 		return err
@@ -149,12 +161,34 @@ func (s *sandbox) PrepareTmpDir() error {
 	// record tmpdir for easy deletion
 	s.options.folder = tmpFolder
 
-	// write source file into tmp dir
-	// TODO (cw|4.29.2018) we should be able to write an arbitrary number of files
-	// to the tmp dir.
-	err = ioutil.WriteFile(tmpFolder+"/"+s.language.SourceFile, []byte(s.code), 0777)
-	if err != nil {
-		return err
+	// write source file and possibly resource files into tmp dir
+	switch s.code.IsFile {
+	case true:
+		// copy source file into tmp dir
+		err = s.copyFile(
+			filepath.Join(s.code.Path, s.code.SourceFileName),
+			filepath.Join(tmpFolder, s.code.SourceFileName),
+		)
+		if err != nil {
+			return err
+		}
+
+		// copy resource files into tmp dir
+		for _, ResourceFileName := range s.code.ResourceFileNames {
+			err = s.copyFile(
+				filepath.Join(s.code.Path, ResourceFileName),
+				filepath.Join(tmpFolder, ResourceFileName),
+			)
+			if err != nil {
+				return err
+			}
+		}
+	case false:
+		// write source file into tmp dir
+		err = ioutil.WriteFile(tmpFolder+"/"+s.language.SourceFile, []byte(s.code.String), 0777)
+		if err != nil {
+			return err
+		}
 	}
 
 	// write a file for stdin
@@ -252,8 +286,9 @@ func (s *sandbox) execute() (string, error) {
 		ctx = context.Background()
 		err error
 	)
-	// delete temporary directory once we have finished execution
-	defer os.RemoveAll(s.options.folder)
+
+	// defer cleanup
+	defer s.cleanup()
 
 	// okay lets start the container...
 	err = s.docker.ContainerStart(
@@ -302,6 +337,82 @@ func (s *sandbox) execute() (string, error) {
 		log.Printf("%s timed out", s.language.Compiler)
 		return "", fmt.Errorf("Timed out")
 	}
+}
+
+func (s *sandbox) cleanup() {
+	// optionally rewrite source and resource files
+	if true {
+		err := s.rewriteUserFiles()
+		if err != nil {
+			log.Fatalf("unable to rewrite files to %s", s.code.Path)
+		}
+	}
+
+	// delete temporary directory once we have finished execution
+	os.RemoveAll(s.options.folder)
+}
+
+// overwrites the original source and resource files supplied by the user with those from
+// the tmp execution directory after execution has successfully completed.
+// you may be wondering:
+// (1) Why would we ever want to do this?
+//        In situations where the code the user supplies modifies itself or its resource files
+//        and we want these changes to persist.
+// (2) When would this situation ever occur?
+//        If the user code will be run multiple times and must maintain state between calls. A
+//        perfect example is a machine learning model which needs to update its parameters
+//        between subsequent calls.
+//
+func (s *sandbox) rewriteUserFiles() error {
+	var (
+		err error
+	)
+
+	// only proceed if the source code is in a file
+	if !s.code.IsFile {
+		return nil
+	}
+
+	// TODO (cw|8.23.2018) add some checks here to ensure that the files aren't
+	// too large.
+
+	// copy tmp source file into original dir
+	err = s.copyFile(
+		filepath.Join(s.options.folder, s.code.SourceFileName),
+		filepath.Join(s.code.Path, s.code.SourceFileName),
+	)
+	if err != nil {
+		return err
+	}
+
+	// copy tmp resource files into original dir
+	for _, ResourceFileName := range s.code.ResourceFileNames {
+		err = s.copyFile(
+			filepath.Join(s.options.folder, ResourceFileName),
+			filepath.Join(s.code.Path, ResourceFileName),
+		)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// short utility for easily copying files
+//
+func (s *sandbox) copyFile(src, dest string) error {
+	bytes, err := ioutil.ReadFile(src)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(dest, bytes, 0777)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // TODO (cw|4.29.2018) this cleanup should be in Context (which is initialized once in the

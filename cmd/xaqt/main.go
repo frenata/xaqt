@@ -74,7 +74,8 @@ func evalCode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// log.Println("submission: ", submission)
-	stdouts, msg := context.Evaluate(submission.Language, submission.Code, submission.Stdins)
+	code := xaqt.Code{IsFile: false, String: submission.Code}
+	stdouts, msg := context.Evaluate(submission.Language, code, submission.Stdins)
 	log.Println(stdouts, msg)
 
 	if len(stdouts) == 0 {
