@@ -209,8 +209,9 @@ func (s *sandbox) PrepareTmpDir() error {
 //
 func (s *sandbox) PrepareContainer() error {
 	var (
-		ctx = context.Background()
-		err error
+		ctx         = context.Background()
+		srcFilename string
+		err         error
 	)
 
 	// the call to #PrepareTmpdir creates a tmp directory within the specified execDir,
@@ -221,6 +222,13 @@ func (s *sandbox) PrepareContainer() error {
 		filepath.Base(s.options.execDir), // get the suffix dir just created in #PrepareTmpDir
 	)
 
+	// get source file name
+	if s.code.IsFile {
+		srcFilename = s.code.SourceFileName
+	} else {
+		srcFilename = s.language.SourceFile
+	}
+
 	// create docker container for executing user code
 	_, err = s.docker.ContainerCreate(
 		ctx,
@@ -229,7 +237,7 @@ func (s *sandbox) PrepareContainer() error {
 			Cmd: []string{
 				"/entrypoint/script.sh",
 				s.language.Compiler,
-				s.language.SourceFile,
+				srcFilename,
 				s.language.OptionalExecutable,
 				s.language.CompilerFlags,
 			},
