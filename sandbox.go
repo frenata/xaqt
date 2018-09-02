@@ -150,6 +150,11 @@ func (s *sandbox) PrepareTmpDir() error {
 	// record tmpdir for easy deletion
 	s.options.execDir = tmpFolder
 
+	// ensure that execMountDir has been set
+	if s.options.execMountDir == "" {
+		s.options.execMountDir = filepath.Dir(s.options.execDir)
+	}
+
 	// copy the Payload dir into the tmp dir. for more details on what the
 	// Payload dir is, check out the TODO (cw|4.29.2018) fill this in...
 	err = s.copyPayload()
@@ -185,7 +190,7 @@ func (s *sandbox) PrepareContainer() error {
 	// the call to #PrepareTmpdir creates a tmp directory within the specified execDir,
 	// we want to mount this tmp dir into the sandbox as /usercode/, so we must append
 	// the new execDir suffix directory onto the execMountDir.
-	execMountDir := filepath.Join(
+	s.options.execMountDir = filepath.Join(
 		s.options.execMountDir,
 		filepath.Base(s.options.execDir), // get the suffix dir just created in #PrepareTmpDir
 	)
