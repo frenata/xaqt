@@ -20,11 +20,32 @@ type Message struct {
 }
 
 // options to control how the sandbox is executed.
+//
+// NOTE: execMountDir is useful when we are using xaqt as an imported package in
+// another application *and* that application is dockerized. In other words, if the
+// main application container is spinning up the xaqt sandbox as a sibling container
+// (achievable by mounting the host docker daemon as the application container's docker
+// daemon), then one must specify the execMountDir.
+// when the main application is dockerized, execMountDir is the location *on the host*
+// machine where the execDir is mounted. Since we are using the host docker daemon, we
+// need to be able to mount the xaqt /usercode/ dir in the execMountDir. This means that
+// the application docker container and the xaqt sandbox docker container share a mounted
+// directory on the host (execMountDir), i.e.
+//
+// -- within dockerized application --
+//   VOLUME $execMountDir:$execDir
+//
+// -- within the xaqt sandbox container --
+//   VOLUME $execMountDir:/usercode/
+//
+// if the main application is *not* dockerized, then execDir == execMountDir.
+//
 type options struct {
-	folder  string // path to folder where results should be recorded
-	path    string // path to execution script
-	image   string // name of docker image to run
-	timeout time.Duration
+	execDir      string // path to tmp execution dir w/ user code
+	execMountDir string // path to tmp execution dir w/ user code on docker host
+	path         string // path to execution script
+	image        string // name of docker image to run
+	timeout      time.Duration
 }
 
 // Uses default sandbox options.

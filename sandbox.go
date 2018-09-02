@@ -137,7 +137,7 @@ func (s *sandbox) prepare() error {
 //
 func (s *sandbox) PrepareTmpDir() error {
 	// create tmp directory for keeping all code and inputs
-	tmpFolder, err := ioutil.TempDir(s.options.folder, TmpDirPrefix)
+	tmpFolder, err := ioutil.TempDir(s.options.execDir, TmpDirPrefix)
 	if err != nil {
 		return err
 	}
@@ -148,7 +148,7 @@ func (s *sandbox) PrepareTmpDir() error {
 	}
 
 	// record tmpdir for easy deletion
-	s.options.folder = tmpFolder
+	s.options.execDir = tmpFolder
 
 	// copy the Payload dir into the tmp dir. for more details on what the
 	// Payload dir is, check out the TODO (cw|4.29.2018) fill this in...
@@ -182,6 +182,14 @@ func (s *sandbox) PrepareContainer() error {
 		err error
 	)
 
+	// the call to #PrepareTmpdir creates a tmp directory within the specified execDir,
+	// we want to mount this tmp dir into the sandbox as /usercode/, so we must append
+	// the new execDir suffix directory onto the execMountDir.
+	execMountDir := filepath.Join(
+		s.options.execMountDir,
+		filepath.Base(s.options.execDir), // get the suffix dir just created in #PrepareTmpDir
+	)
+
 	// create docker container for executing user code
 	_, err = s.docker.ContainerCreate(
 		ctx,
@@ -205,7 +213,7 @@ func (s *sandbox) PrepareContainer() error {
 			// remove container from host once it exits
 			AutoRemove: true,
 			// specify the mount point(s) for the sandbox
-			Binds: []string{s.options.folder + ":/usercode"},
+			Binds: []string{s.options.execMountDir + ":/usercode"},
 		},
 		nil, // no network config currently
 		s.ID,
@@ -261,7 +269,7 @@ func (s *sandbox) execute() (string, error) {
 		err error
 	)
 	// delete temporary directory once we have finished execution
-	defer os.RemoveAll(s.options.folder)
+	defer os.RemoveAll(s.options.execDir)
 
 	// okay lets start the container...
 	err = s.docker.ContainerStart(
@@ -279,7 +287,7 @@ func (s *sandbox) execute() (string, error) {
 		// ok. the docker process has stopped and the container has been removed.
 
 		// get the errors file
-		errorBytes, err := ioutil.ReadFile(s.options.folder + "/errors")
+		errorBytes, err := ioutil.ReadFile(s.options.execDir + "/errors")
 		if err != nil {
 			// there was an error reading the errors file, perhaps it is missing?
 			return "", err
@@ -293,7 +301,7 @@ func (s *sandbox) execute() (string, error) {
 			return "", err
 		}
 
-		outputBytes, err := ioutil.ReadFile(s.options.folder + "/completed")
+		outputBytes, err := ioutil.ReadFile(s.options.execDir + "/completed")
 		if err != nil {
 			// there was an error reading the completed file, perhaps it is missing?
 			return "", err
@@ -314,7 +322,7 @@ func (s *sandbox) execute() (string, error) {
 
 func (s *sandbox) copyPayload() error {
 	source := filepath.Join(s.options.path, "Payload")
-	dest := filepath.Join(s.options.folder)
+	dest := filepath.Join(s.options.execDir)
 
 	directory, err := os.Open(source)
 	if err != nil {
