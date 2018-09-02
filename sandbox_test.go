@@ -31,8 +31,8 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithSourceString() {
 		},
 		stdin: expectedStdin,
 		options: options{
-			folder: "",
-			path:   DataPath(),
+			execDir: "",
+			path:    DataPath(),
 		},
 	}
 
@@ -40,10 +40,10 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithSourceString() {
 	s.NoError(err)
 
 	// defer cleanup
-	defer os.RemoveAll(sandbox.options.folder)
+	defer os.RemoveAll(sandbox.options.execDir)
 
 	// input file exists?
-	inputFile := filepath.Join(sandbox.options.folder, STDIN_FILENAME)
+	inputFile := filepath.Join(sandbox.options.execDir, STDIN_FILENAME)
 	_, err = os.Stat(inputFile)
 	s.NoError(err)
 
@@ -53,7 +53,7 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithSourceString() {
 	s.EqualValues(expectedStdin, string(actualStdinBytes))
 
 	// source file exists?
-	sourceFile := filepath.Join(sandbox.options.folder, srcFileName)
+	sourceFile := filepath.Join(sandbox.options.execDir, srcFileName)
 	_, err = os.Stat(sourceFile)
 	s.NoError(err)
 
@@ -88,8 +88,8 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithSourceFile() {
 		},
 		stdin: expectedStdin,
 		options: options{
-			folder: "",
-			path:   DataPath(),
+			execDir: "",
+			path:    DataPath(),
 		},
 	}
 
@@ -97,10 +97,10 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithSourceFile() {
 	s.NoError(err)
 
 	// defer cleanup
-	defer os.RemoveAll(sandbox.options.folder)
+	defer os.RemoveAll(sandbox.options.execDir)
 
 	// input file exists?
-	inputFile := filepath.Join(sandbox.options.folder, STDIN_FILENAME)
+	inputFile := filepath.Join(sandbox.options.execDir, STDIN_FILENAME)
 	_, err = os.Stat(inputFile)
 	s.NoError(err)
 
@@ -110,7 +110,7 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithSourceFile() {
 	s.EqualValues(expectedStdin, string(actualStdinBytes))
 
 	// source file exists?
-	sourceFile := filepath.Join(sandbox.options.folder, srcFileName)
+	sourceFile := filepath.Join(sandbox.options.execDir, srcFileName)
 	_, err = os.Stat(sourceFile)
 	s.NoError(err)
 
@@ -157,8 +157,8 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithResourceFiles() {
 		},
 		stdin: expectedStdin,
 		options: options{
-			folder: "",
-			path:   DataPath(),
+			execDir: "",
+			path:    DataPath(),
 		},
 	}
 
@@ -166,10 +166,10 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithResourceFiles() {
 	s.NoError(err)
 
 	// defer cleanup
-	defer os.RemoveAll(sandbox.options.folder)
+	defer os.RemoveAll(sandbox.options.execDir)
 
 	// input file exists?
-	inputFile := filepath.Join(sandbox.options.folder, STDIN_FILENAME)
+	inputFile := filepath.Join(sandbox.options.execDir, STDIN_FILENAME)
 	_, err = os.Stat(inputFile)
 	s.NoError(err)
 
@@ -179,7 +179,7 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithResourceFiles() {
 	s.EqualValues(expectedStdin, string(actualStdinBytes))
 
 	// source file exists?
-	sourceFile := filepath.Join(sandbox.options.folder, srcFileName)
+	sourceFile := filepath.Join(sandbox.options.execDir, srcFileName)
 	_, err = os.Stat(sourceFile)
 	s.NoError(err)
 
@@ -190,7 +190,7 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithResourceFiles() {
 
 	// are resource files existing and correct?
 	for resourceFileName, expectedResourceString := range resourceFiles {
-		resourceFilePath := filepath.Join(sandbox.options.folder, resourceFileName)
+		resourceFilePath := filepath.Join(sandbox.options.execDir, resourceFileName)
 		_, err = os.Stat(resourceFilePath)
 		s.NoError(err)
 
@@ -241,8 +241,8 @@ func (s *SandboxTestSuite) TestRewriteUserFiles() {
 			Path:              "",
 		},
 		options: options{
-			folder: "",
-			path:   DataPath(),
+			execDir: "",
+			path:    DataPath(),
 		},
 	}
 
@@ -250,12 +250,12 @@ func (s *SandboxTestSuite) TestRewriteUserFiles() {
 	s.NoError(err)
 
 	// defer cleanup
-	defer os.RemoveAll(sandbox.options.folder)
+	defer os.RemoveAll(sandbox.options.execDir)
 
 	// simulate execution by rewriting the files in the tmp directory
 	// rewrite test source file
 	err = ioutil.WriteFile(
-		filepath.Join(sandbox.options.folder, srcFileName),
+		filepath.Join(sandbox.options.execDir, srcFileName),
 		[]byte(expectedSourceString),
 		0777,
 	)
@@ -263,7 +263,7 @@ func (s *SandboxTestSuite) TestRewriteUserFiles() {
 	// rewrite test resource files
 	for resourceFileName, resourceString := range expectedResourceFiles {
 		err = ioutil.WriteFile(
-			filepath.Join(sandbox.options.folder, resourceFileName),
+			filepath.Join(sandbox.options.execDir, resourceFileName),
 			[]byte(resourceString),
 			0777,
 		)

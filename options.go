@@ -30,7 +30,7 @@ func defaultOptions(c *Context) error {
 	c.path = DataPath()
 
 	if runtime.GOOS == "darwin" {
-		c.folder = "/tmp"
+		c.execDir = "/tmp"
 	}
 
 	c.image = DEFAULT_DOCKER_IMAGE
@@ -63,10 +63,30 @@ func Path(p string) option {
 	}
 }
 
-// TargetFolder configures where the result directory should be created.
-func TargetFolder(f string) option {
+// ExecDir configures where the user code will be executed and where the results
+// will reside upon completion. this function will also set the execMountDir if it
+// has not been previously set (making the assumption that execDir == execMountDir).
+//
+func ExecDir(f string) option {
 	return func(c *Context) error {
-		c.folder = f
+		c.execDir = f
+
+		if c.execMountDir == "" {
+			c.execMountDir = c.execDir
+		}
+
+		return nil
+	}
+}
+
+// ExecMountDir configures where the user code execution / results directory is mounted
+// on the host. This only needs to be spcified if the main application is run within
+// its own docker container which will be spinning up the xaqt sandbox as a sibling
+// container using the host's docker daemon.
+//
+func ExecMountDir(f string) option {
+	return func(c *Context) error {
+		c.execMountDir = f
 		return nil
 	}
 }
