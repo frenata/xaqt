@@ -211,9 +211,17 @@ func (s *sandbox) PrepareTmpDir() error {
 //
 func (s *sandbox) PrepareContainer() error {
 	var (
-		ctx = context.Background()
-		err error
+		ctx         = context.Background()
+		srcFilename string
+		err         error
 	)
+
+	// get source file name
+	if s.code.IsFile {
+		srcFilename = s.code.SourceFileName
+	} else {
+		srcFilename = s.language.SourceFile
+	}
 
 	// create docker container for executing user code
 	_, err = s.docker.ContainerCreate(
@@ -223,7 +231,7 @@ func (s *sandbox) PrepareContainer() error {
 			Cmd: []string{
 				"/usercode/script.sh",
 				s.language.Compiler,
-				s.language.SourceFile,
+				srcFilename,
 				s.language.OptionalExecutable,
 				s.language.CompilerFlags,
 			},
