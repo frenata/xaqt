@@ -32,7 +32,6 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithSourceString() {
 		stdin: expectedStdin,
 		options: options{
 			execDir: "",
-			path:    DataPath(),
 		},
 	}
 
@@ -89,7 +88,6 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithSourceFile() {
 		stdin: expectedStdin,
 		options: options{
 			execDir: "",
-			path:    DataPath(),
 		},
 	}
 
@@ -158,7 +156,6 @@ func (s *SandboxTestSuite) TestPrepareTmpDir_WithResourceFiles() {
 		stdin: expectedStdin,
 		options: options{
 			execDir: "",
-			path:    DataPath(),
 		},
 	}
 
@@ -242,7 +239,6 @@ func (s *SandboxTestSuite) TestRewriteUserFiles() {
 		},
 		options: options{
 			execDir: "",
-			path:    DataPath(),
 		},
 	}
 
