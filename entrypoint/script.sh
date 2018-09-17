@@ -15,7 +15,7 @@ compiler=$1
 file=$2
 runner=$3
 addtionalArg=$4
-
+inputType=$5  # ARGS vs STDIN
 
 ########################################################################
 #	- The script works as follows
@@ -45,6 +45,11 @@ addtionalArg=$4
 exec  1> $"/usercode/logfile.txt"
 exec  2> $"/usercode/errors"
 
+# default input type to stdin
+if [ "$inputType" = "" ]; then
+  inputType="STDIN"
+fi
+
 
 START=$(date +%s.%2N)
 NL=$'\n'
@@ -59,8 +64,12 @@ if [ "$runner" = "" ]; then
 	while read p; do
 		if [ "$p" = "$IN_SEP" ]; then
 			
-			# run program with input
-			OUTPUT="$(echo -n "$INPUT" | $compiler /usercode/$file)"
+		        # run program with input
+                        if [ "$inputType" = "STDIN" ]; then
+			       OUTPUT="$(echo -n "$INPUT" | $compiler /usercode/$file)"
+                        elif [ "$inputType" = "ARGS" ]; then
+                               OUTPUT="$($compiler /usercode/$file $INPUT)"
+                        fi
 
 			if [ ${#OUTPUT} = 0 ]; then 
 				# if no input is produced, make a newline (makes later parsing possible)
@@ -75,8 +84,11 @@ if [ "$runner" = "" ]; then
 			FIRST_LINE="TRUE"
 		else
 			if [ "$FIRST_LINE" = "FALSE" ];then
-				INPUT="$INPUT$NL"
-				# echo "Adding \n"
+                                if [ "$inputType" = "STDIN" ]; then
+			                INPUT="$INPUT$NL"
+                                elif [ "$inputType" = "ARGS" ]; then
+                                        INPUT="$INPUT"
+                                fi
 			fi
 			INPUT="$INPUT$p"
 			FIRST_LINE="FALSE"
@@ -94,7 +106,12 @@ else  # runner was not blank
 				if [ "$p" = "$IN_SEP" ]; then
 					
 					# run program with input
-					OUTPUT="$(echo -n "$INPUT" | $runner)"
+                                        if [ "$inputType" = "STDIN" ]; then
+			                        OUTPUT="$(echo -n "$INPUT" | $runner /usercode/$file)"
+                                        elif [ "$inputType" = "ARGS" ]; then
+                                                OUTPUT="$($runner /usercode/$file $INPUT)"
+                                        fi
+
 
 					if [ ${#OUTPUT} = 0 ]; then 
 						# if no input is produced, make a newline (makes later parsing possible)
@@ -108,9 +125,12 @@ else  # runner was not blank
 					INPUT=""
 					FIRST_LINE="TRUE"
 				else
-					if [ "$FIRST_LINE" = "FALSE" ];then
-						INPUT="$INPUT$NL"
-						# echo "Adding \n"
+				        if [ "$FIRST_LINE" = "FALSE" ];then
+                                                if [ "$inputType" = "STDIN" ]; then
+			                                INPUT="$INPUT$NL"
+                                                elif [ "$inputType" = "ARGS" ]; then
+                                                        INPUT="$INPUT"
+                                                fi
 					fi
 					INPUT="$INPUT$p"
 					FIRST_LINE="FALSE"

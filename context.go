@@ -45,6 +45,7 @@ type options struct {
 	execMountDir string // path to tmp execution dir w/ user code on docker host
 	image        string // name of docker image to run
 	timeout      time.Duration
+	inputType    string
 }
 
 // Uses default sandbox options.
