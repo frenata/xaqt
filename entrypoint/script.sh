@@ -68,7 +68,7 @@ if [ "$runner" = "" ]; then
                         if [ "$inputType" = "STDIN" ]; then
 			       OUTPUT="$(echo -n "$INPUT" | $compiler /usercode/$file)"
                         elif [ "$inputType" = "ARGS" ]; then
-                               OUTPUT="$($compiler /usercode/$file $INPUT)"
+                               OUTPUT="$(echo $($compiler /usercode/$file $INPUT))"
                         fi
 
 			if [ ${#OUTPUT} = 0 ]; then 
@@ -109,7 +109,7 @@ else  # runner was not blank
                                         if [ "$inputType" = "STDIN" ]; then
 			                        OUTPUT="$(echo -n "$INPUT" | $runner /usercode/$file)"
                                         elif [ "$inputType" = "ARGS" ]; then
-                                                OUTPUT="$($runner /usercode/$file $INPUT)"
+                                                OUTPUT="$(echo $($runner /usercode/$file $INPUT))"
                                         fi
 
 

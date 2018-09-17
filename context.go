@@ -81,7 +81,7 @@ func (c *Context) Evaluate(language string, code Code, stdins []string) ([]strin
 // input is n test calls seperated by newlines
 // input and expected MUST end in newlines
 func (c *Context) run(language string, code Code, stdinGlob string) (string, Message) {
-	log.Printf("launching new %s sandbox", language)
+	// log.Printf("launching new %s sandbox", language)
 	// log.Printf("launching sandbox...\nLanguage: %s\nStdin: %sCode: Hidden\n", language, stdinGlob)
 
 	lang, ok := c.compilers[strings.ToLower(language)]
